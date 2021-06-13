@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Xchgrts</string>
+
+    <string name="currency_selection_title">Select currency</string>
+    <string name="ok">OK</string>
+    <string name="uah">%s UAH</string>
+
+    <string name="loading_error">Couldn\'t load data</string>
+    <string name="loading_error_http">Couldn\'t load data from network</string>
+
+    <string name="retry">Retry</string>
+    <string name="finish">Finish</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_oss_licenses">OSS Licenses</string>
 </resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="xyz.randomcode.xchgrts.entities.CurrencyListItem" />
+
+        <variable
+            name="listener"
+            type="xyz.randomcode.xchgrts.widgets.config.CurrencyListItemClickListener" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> listener.updateItemSelection(item.letterCode)}"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:imageRes="@{item.flagId}" />
+
+        <TextView
+            android:id="@+id/letterCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{item.letterCode}"
+            android:textColor="@color/text_normal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="AAA" />
+
+        <TextView
+            android:id="@+id/displayName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@{item.displayName}"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Display name" />
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_check"
+            android:visibility="@{item.selected ? View.VISIBLE : View.INVISIBLE}"
+            app:tint="@color/black" />
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Xchgrts" parent="Theme.Xchgrts.Base">
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/window_bg</item>
+    </style>
+
+    <style name="Theme.Xchgrts.License" parent="Theme.Xchgrts.License.Base">
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/window_bg</item>
+    </style>
+</resources>

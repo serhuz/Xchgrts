@@ -1,0 +1,115 @@
+/*
+ * Copyright 2021 Sergei Munovarov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package xyz.randomcode.xchgrts.main
+
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import arrow.core.*
+import arrow.optics.Getter
+import arrow.optics.Lens
+import arrow.optics.Prism
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import xyz.randomcode.xchgrts.domain.RateDataUseCase
+import xyz.randomcode.xchgrts.domain.util.DateProvider
+import xyz.randomcode.xchgrts.domain.util.extractValue
+import xyz.randomcode.xchgrts.entities.*
+import xyz.randomcode.xchgrts.util.Prefs
+import xyz.randomcode.xchgrts.util.currentValue
+import xyz.randomcode.xchgrts.util.modify
+
+class ExchangeRatesViewModel(
+    private val state: SavedStateHandle,
+    private val prefs: Prefs,
+    val case: RateDataUseCase
+) : ViewModel() {
+
+    val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
+
+    private val favItem = Getter<ExchangeListItem, RateListItem> { FavItem(prefs.favCurrencies.contains(it.letterCode), it) }
+
+    private var job: Job? = null
+
+    init {
+        loadRates()
+    }
+
+    fun loadRates() {
+        job = viewModelScope.launch {
+            items.value = Loading
+            Either.catch {
+                withContext(Dispatchers.IO) {
+                    case.getRatesForDate(DateProvider().currentDate)
+                }
+            }
+                .map(this@ExchangeRatesViewModel::mapFavorites)
+                .map(this@ExchangeRatesViewModel::sortFavorites)
+                .bimap(::Failure, ::Success)
+                .fold(items::setValue, items::setValue)
+        }
+    }
+
+    private fun mapFavorites(list: List<ExchangeListItem>) = list.map(favItem::get)
+
+    private fun sortFavorites(list: List<RateListItem>) =
+        list.sortedWith { o1, o2 ->
+            if ((o1.isFavorite && o2.isFavorite) || (!o1.isFavorite && !o2.isFavorite)) {
+                o1.data.letterCode.compareTo(o2.data.letterCode)
+            } else if (o1.isFavorite) {
+                Int.MIN_VALUE
+            } else {
+                Int.MAX_VALUE
+            }
+        }
+
+    fun updateFavorites(letterCode: String) {
+        items.currentValue
+            .flatMap(Resource<List<RateListItem>>::extractValue)
+            .fold(
+                { error("List is empty") },
+                { items ->
+                    prefs.favCurrencies = if (prefs.favCurrencies.contains(letterCode)) {
+                        prefs.favCurrencies - letterCode
+                    } else {
+                        prefs.favCurrencies + letterCode
+                    }
+
+                    items.modify(codeEquals(letterCode)) { isFavorite<ExchangeListItem>().modify(it, Boolean::not) }
+                        .let(this::sortFavorites)
+                        .let(::Success)
+                        .let(this.items::setValue)
+                }
+            )
+    }
+
+    private fun codeEquals(letterCode: String) = Prism<RateListItem, RateListItem>(
+        getOption = { if (it.data.letterCode == letterCode) it.some() else none() },
+        reverseGet = ::identity
+    )
+
+    private fun <T> isFavorite() = Lens(get = FavItem<T>::isFavorite, set = FavItem<T>::copy)
+
+    override fun onCleared() {
+        job?.cancel()
+    }
+}
+
+typealias RateListItem = FavItem<ExchangeListItem>

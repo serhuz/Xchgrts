@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/currencyFlag"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            tools:src="@drawable/eu" />
+
+        <TextView
+            android:id="@+id/currencyCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/text_normal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="1 AAA" />
+
+        <TextView
+            android:id="@+id/currencyName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            tools:text="Super Very LongCurrency Name" />
+
+        <TextView
+            android:id="@+id/exchangeRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:gravity="end"
+            android:textColor="@color/text_normal"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="100.000" />
+
+        <ImageView
+            android:id="@+id/favIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            app:tint="@color/favorite"
+            tools:src="@drawable/ic_outline_star" />
+
+    </LinearLayout>
+</layout>

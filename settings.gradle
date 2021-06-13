@@ -1,2 +1,4 @@
 rootProject.name = "Xchgrts"
 include ':app'
+include ':entities'
+include ':domain'

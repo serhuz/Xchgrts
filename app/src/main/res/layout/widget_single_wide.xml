@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@drawable/bg_widget"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    tools:layout_width="250dp"
+    android:id="@+id/widgetLayout">
+
+    <TextView
+        android:id="@+id/widgetDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/widget_text"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="28.02" />
+
+    <ImageView
+        android:id="@+id/widgetFlag"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        tools:src="@drawable/globe" />
+
+    <TextView
+        android:id="@+id/widgetCurrencyUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/widget_text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="1000 USD" />
+
+    <TextView
+        android:id="@+id/widgetRateText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="end"
+        android:textColor="@color/widget_text"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="27.4528" />
+
+</LinearLayout>
