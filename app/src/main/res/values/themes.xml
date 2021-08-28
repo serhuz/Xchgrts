@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.Xchgrts.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Xchgrts.Base" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_600</item>
         <item name="colorPrimaryVariant">@color/blue_800</item>
@@ -18,7 +18,7 @@
 
     <style name="Theme.Xchgrts" parent="Theme.Xchgrts.Base" />
 
-    <style name="Theme.Xchgrts.License.Base" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.Xchgrts.License.Base" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/blue_600</item>
         <item name="colorPrimaryVariant">@color/blue_800</item>
         <item name="colorOnPrimary">@color/white</item>
