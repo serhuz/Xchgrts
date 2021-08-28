@@ -8,4 +8,5 @@
     android:previewLayout="@layout/widget_single_wide"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    android:widgetFeatures="reconfigurable" />
