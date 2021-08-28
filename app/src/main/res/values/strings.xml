@@ -1,5 +1,5 @@
-<resources>
-    <string name="app_name">Xchgrts</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <string name="app_name" translatable="false">Xchgrts</string>
 
     <string name="currency_selection_title">Select currency</string>
     <string name="ok">OK</string>

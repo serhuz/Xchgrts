@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="ru">
+
+    <string name="currency_selection_title">Выберите валюту</string>
+    <string name="ok">ОК</string>
+    <string name="uah">%s ГРН</string>
+    <string name="loading_error">Не удалось загрузить данные</string>
+    <string name="loading_error_http">Не удалось загрузить данные из сети</string>
+    <string name="retry">Повторить</string>
+    <string name="finish">Завершить</string>
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_oss_licenses">Лицензии ПО</string>
+</resources>
