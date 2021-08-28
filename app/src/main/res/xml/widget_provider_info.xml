@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="xyz.randomcode.xchgrts.widgets.config.CurrencySelectionActivity"
+    android:description="@string/widget_description"
     android:minWidth="250dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/ic_pic_preview_single"
+    android:previewLayout="@layout/widget_single_wide"
     android:resizeMode="horizontal"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

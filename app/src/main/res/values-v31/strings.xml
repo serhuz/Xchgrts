@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_widget_date">01.01</string>
+    <string name="widget_default_amount">1000 XXX</string>
+    <string name="widget_default_rate">10.1234</string>
+
+    <string name="widget_description">Get exchange rate for selected currency</string>
+</resources>
