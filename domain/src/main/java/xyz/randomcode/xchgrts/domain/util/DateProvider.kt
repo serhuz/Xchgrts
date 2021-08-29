@@ -20,16 +20,17 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import xyz.randomcode.xchgrts.entities.CurrentDate
 
 class DateProvider(private val initialInstant: Instant = Clock.System.now()) {
 
-    val currentDate: String
+    val currentDate: CurrentDate
         get() = initialInstant.toLocalDateTime(ZONE_UA)
             .let {
                 val day = "${it.dayOfMonth}".padStart(2, '0')
                 val month = "${it.monthNumber}".padStart(2, '0')
                 val year = "${it.year}"
-                "$day$month$year"
+                CurrentDate(day, month, year)
             }
 
     val minutesToMidnight: Int
