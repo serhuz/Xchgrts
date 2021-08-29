@@ -65,7 +65,7 @@ class WidgetProvider : AppWidgetProvider(), KoinComponent {
             ids.forEach { id ->
                 prefs.loadWidgetSettings(id)?.let {
                     val intent = Intent(context, MainActivity::class.java).let {
-                        PendingIntent.getActivity(context, 0, it, 0)
+                        PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE)
                     }
 
                     val exchangeRate = case.getRateForDate(DateProvider().currentDate, it.letterCode)

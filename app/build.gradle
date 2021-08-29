@@ -10,9 +10,6 @@ plugins {
 apply from: '../common/common.gradle'
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "31.0.0"
-
     defaultConfig {
         applicationId "xyz.randomcode.xchgrts"
         versionCode 1
