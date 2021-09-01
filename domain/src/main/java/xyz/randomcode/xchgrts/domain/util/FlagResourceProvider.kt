@@ -16,12 +16,15 @@
 
 package xyz.randomcode.xchgrts.domain.util
 
+import androidx.annotation.VisibleForTesting
+
 abstract class FlagResourceProvider {
 
     fun getFlagResourceForCurrency(letterCode: String): Int =
         getFlag(letterCode.substring(0..1))
 
-    protected abstract fun getFlag(alpha2Code: String): Int
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    abstract fun getFlag(alpha2Code: String): Int
 
     abstract fun fallbackIcon(): Int
 }
