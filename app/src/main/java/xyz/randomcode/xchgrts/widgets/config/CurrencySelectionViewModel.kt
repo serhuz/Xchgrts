@@ -21,6 +21,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,8 +35,10 @@ import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.SingleLiveEvent
 import xyz.randomcode.xchgrts.util.currentValue
 import xyz.randomcode.xchgrts.util.modify
+import javax.inject.Inject
 
-class CurrencySelectionViewModel(
+@HiltViewModel
+class CurrencySelectionViewModel @Inject constructor(
     private val state: SavedStateHandle,
     val case: RateDataUseCase,
     val prefs: Prefs

@@ -18,41 +18,48 @@ package xyz.randomcode.xchgrts.main
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import retrofit2.HttpException
+import xyz.randomcode.xchgrts.R
+import xyz.randomcode.xchgrts.databinding.FragmentExchangeRatesBinding
 import xyz.randomcode.xchgrts.entities.Failure
 import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Success
-import xyz.randomcode.xchgrts.R
-import xyz.randomcode.xchgrts.databinding.FragmentExchangeRatesBinding
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-
-import android.content.Intent
-import com.google.android.material.snackbar.Snackbar
-import retrofit2.HttpException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExchangeRatesFragment : Fragment() {
 
-    private val viewModel: ExchangeRatesViewModel by stateViewModel()
+    private val viewModel: ExchangeRatesViewModel by viewModels()
     private val adapter: ExchangeRatesAdapter by lazy { ExchangeRatesAdapter() }
-    private val prefs: Prefs by inject()
     private lateinit var binding: FragmentExchangeRatesBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+    @Inject
+    lateinit var prefs: Prefs
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         FragmentExchangeRatesBinding.inflate(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +86,7 @@ class ExchangeRatesFragment : Fragment() {
 
         adapter.favUpdate.observe(viewLifecycleOwner, viewModel::updateFavorites)
 
-        viewModel.items.observe(viewLifecycleOwner, {
+        viewModel.items.observe(viewLifecycleOwner) {
             when (it) {
                 is Loading -> {
                     binding.exchangeRateProgress.isVisible = true
@@ -90,9 +97,9 @@ class ExchangeRatesFragment : Fragment() {
                     showRetrySnackbar(it.reason)
                 }
                 is Success -> {
-                    it.data.fold(HashSet<String>(), { acc, item ->
+                    it.data.fold(HashSet<String>()) { acc, item ->
                         acc.apply { add(item.data.date) }
-                    })
+                    }
                         .single()
                         .let(binding.exchangeRateToolbar::setTitle)
 
@@ -104,7 +111,7 @@ class ExchangeRatesFragment : Fragment() {
                     updateWidgets()
                 }
             }
-        })
+        }
     }
 
     private fun showRetrySnackbar(reason: Throwable) {

@@ -24,6 +24,7 @@ import arrow.core.*
 import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Prism
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,8 +36,10 @@ import xyz.randomcode.xchgrts.entities.*
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.currentValue
 import xyz.randomcode.xchgrts.util.modify
+import javax.inject.Inject
 
-class ExchangeRatesViewModel(
+@HiltViewModel
+class ExchangeRatesViewModel @Inject constructor(
     private val state: SavedStateHandle,
     private val prefs: Prefs,
     val case: RateDataUseCase
@@ -44,7 +47,12 @@ class ExchangeRatesViewModel(
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
 
-    private val favItem = Getter<ExchangeListItem, RateListItem> { FavItem(prefs.favCurrencies.contains(it.letterCode), it) }
+    private val favItem = Getter<ExchangeListItem, RateListItem> {
+        FavItem(
+            prefs.favCurrencies.contains(it.letterCode),
+            it
+        )
+    }
 
     private var job: Job? = null
 

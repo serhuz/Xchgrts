@@ -18,9 +18,11 @@ package xyz.randomcode.xchgrts.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

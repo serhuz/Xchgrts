@@ -20,8 +20,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.squareup.moshi.JsonAdapter
 import xyz.randomcode.xchgrts.entities.WidgetSettings
+import javax.inject.Inject
 
-class Prefs(
+class Prefs @Inject constructor(
     private val preferences: SharedPreferences,
     private val adapter: JsonAdapter<WidgetSettings>
 ) {

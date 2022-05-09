@@ -21,26 +21,30 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import retrofit2.HttpException
-import xyz.randomcode.xchgrts.entities.*
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.databinding.ActivityCurrencySelectionBinding
+import xyz.randomcode.xchgrts.entities.Failure
+import xyz.randomcode.xchgrts.entities.Loading
+import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.net.UnknownHostException
 
+@AndroidEntryPoint
 class CurrencySelectionActivity : AppCompatActivity() {
 
-    private val viewModel: CurrencySelectionViewModel by stateViewModel()
+    private val viewModel: CurrencySelectionViewModel by viewModels()
     private val adapter: CurrencySelectionAdapter by lazy { CurrencySelectionAdapter(viewModel) }
     private lateinit var binding: ActivityCurrencySelectionBinding
 

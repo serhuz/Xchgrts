@@ -20,28 +20,29 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
+import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import retrofit2.HttpException
+import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
-import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.util.concurrent.TimeUnit
 
-class UpdateWorker(
-    private val context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context.applicationContext, params), KoinComponent {
-
-    private val case: RateDataUseCase by inject()
-    private val prefs: Prefs by inject()
+@HiltWorker
+class UpdateWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted params: WorkerParameters,
+    private val case: RateDataUseCase,
+    private val prefs: Prefs
+) : CoroutineWorker(context.applicationContext, params) {
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.IO) {
@@ -49,10 +50,12 @@ class UpdateWorker(
             try {
                 case.updateRates(DateProvider().currentDate)
                 updateWidgets()
-                FirebaseAnalytics.getInstance(context).logEvent("currency_update_done", Bundle.EMPTY)
+                FirebaseAnalytics.getInstance(context)
+                    .logEvent("currency_update_done", Bundle.EMPTY)
                 Result.success()
             } catch (e: Exception) {
-                FirebaseAnalytics.getInstance(context).logEvent("currency_update_failed", Bundle.EMPTY)
+                FirebaseAnalytics.getInstance(context)
+                    .logEvent("currency_update_failed", Bundle.EMPTY)
                 if (e is HttpException) {
                     Result.retry()
                 } else {
@@ -67,7 +70,15 @@ class UpdateWorker(
             .let(widgetManager::getAppWidgetIds)
             .forEach { id ->
                 prefs.loadWidgetSettings(id)
-                    ?.let { WidgetProvider.updateWidgets(applicationContext, widgetManager, prefs, case, it.id) }
+                    ?.let {
+                        WidgetProvider.updateWidgets(
+                            applicationContext,
+                            widgetManager,
+                            prefs,
+                            case,
+                            it.id
+                        )
+                    }
                     ?: FirebaseCrashlytics.getInstance()
                         .recordException(IllegalStateException("No settings found for widget $id"))
             }
