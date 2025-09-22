@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CurrencyData(
-    @Json(name = "StartDate") val date: String,
-    @Json(name = "TimeSign") val time: String,
-    @Json(name = "CurrencyCode") val numberCode: String,
-    @Json(name = "CurrencyCodeL") val letterCode: String,
-    @Json(name = "Units") val units: Int,
-    @Json(name = "Amount") val amount: Float
+    @field:Json(name = "StartDate") val date: String,
+    @field:Json(name = "TimeSign") val time: String,
+    @field:Json(name = "CurrencyCode") val numberCode: String,
+    @field:Json(name = "CurrencyCodeL") val letterCode: String,
+    @field:Json(name = "Units") val units: Int,
+    @field:Json(name = "Amount") val amount: Float
 )

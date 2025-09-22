@@ -17,6 +17,7 @@
 package xyz.randomcode.xchgrts.main
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.updater.UpdateWorker
@@ -24,6 +25,7 @@ import xyz.randomcode.xchgrts.updater.UpdateWorker
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

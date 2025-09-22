@@ -29,9 +29,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
-import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.main.MainActivity
 import xyz.randomcode.xchgrts.util.Prefs
 
@@ -65,7 +65,7 @@ class WidgetProvider : AppWidgetProvider(), KoinComponent {
             ids.forEach { id ->
                 prefs.loadWidgetSettings(id)?.let {
                     val intent = Intent(context, MainActivity::class.java).let {
-                        PendingIntent.getActivity(context, 0, it, 0)
+                        PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE)
                     }
 
                     val exchangeRate = case.getRateForDate(DateProvider().currentDate, it.letterCode)

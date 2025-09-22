@@ -18,13 +18,12 @@ package xyz.randomcode.xchgrts.util
 
 import android.content.Context
 import xyz.randomcode.xchgrts.domain.util.FlagResourceProvider
-import xyz.randomcode.xchgrts.R
 
 class DrawableResProvider(private val context: Context) : FlagResourceProvider() {
 
     override fun getFlag(alpha2Code: String): Int =
         if (alpha2Code == "do") {
-            R.drawable.dominican
+            com.blongho.country_data.R.drawable.dominican
         } else {
             val resource = "drawable/${alpha2Code.lowercase()}"
             context.resources
@@ -33,5 +32,5 @@ class DrawableResProvider(private val context: Context) : FlagResourceProvider()
                 ?: fallbackIcon()
         }
 
-    override fun fallbackIcon(): Int = R.drawable.globe
+    override fun fallbackIcon(): Int = com.blongho.country_data.R.drawable.globe
 }

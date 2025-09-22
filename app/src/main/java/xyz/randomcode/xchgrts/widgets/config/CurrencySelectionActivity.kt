@@ -31,9 +31,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import retrofit2.HttpException
-import xyz.randomcode.xchgrts.entities.*
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.databinding.ActivityCurrencySelectionBinding
+import xyz.randomcode.xchgrts.entities.Failure
+import xyz.randomcode.xchgrts.entities.Loading
+import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.net.UnknownHostException
@@ -46,11 +48,17 @@ class CurrencySelectionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.widgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        viewModel.widgetId = intent.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        )
             ?: AppWidgetManager.INVALID_APPWIDGET_ID
         setResult(Activity.RESULT_CANCELED)
 
-        DataBindingUtil.setContentView<ActivityCurrencySelectionBinding>(this, R.layout.activity_currency_selection)
+        DataBindingUtil.setContentView<ActivityCurrencySelectionBinding>(
+            this,
+            R.layout.activity_currency_selection
+        )
             .also { binding = it }
 
         binding.viewModel = viewModel
@@ -79,6 +87,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
                         currencySelectionList.isVisible = false
                     }
                 }
+
                 is Failure -> {
                     binding.apply {
                         currencyListProgress.isVisible = false
@@ -86,6 +95,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
                     }
                     showRetrySnackbar(it.reason)
                 }
+
                 is Success -> {
                     binding.apply {
                         currencyListProgress.isVisible = false
@@ -101,12 +111,21 @@ class CurrencySelectionActivity : AppCompatActivity() {
     private fun showRetrySnackbar(reason: Throwable) {
         when (reason) {
             is HttpException, is UnknownHostException -> {
-                Snackbar.make(binding.coordinator, R.string.loading_error_http, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(
+                    binding.coordinator,
+                    R.string.loading_error_http,
+                    Snackbar.LENGTH_INDEFINITE
+                )
                     .setAction(R.string.retry) { viewModel.loadCurrencyList() }
                     .show()
             }
+
             else -> {
-                Snackbar.make(binding.coordinator, R.string.loading_error, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(
+                    binding.coordinator,
+                    R.string.loading_error,
+                    Snackbar.LENGTH_INDEFINITE
+                )
                     .setAction(R.string.finish) { finish() }
                     .show()
             }
@@ -138,6 +157,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
                 finish()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
 }

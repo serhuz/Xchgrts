@@ -18,6 +18,7 @@ package xyz.randomcode.xchgrts.main
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,24 +26,22 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.stateViewModel
+import retrofit2.HttpException
+import xyz.randomcode.xchgrts.R
+import xyz.randomcode.xchgrts.databinding.FragmentExchangeRatesBinding
 import xyz.randomcode.xchgrts.entities.Failure
 import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Success
-import xyz.randomcode.xchgrts.R
-import xyz.randomcode.xchgrts.databinding.FragmentExchangeRatesBinding
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-
-import android.content.Intent
-import com.google.android.material.snackbar.Snackbar
-import retrofit2.HttpException
 import java.net.UnknownHostException
 
 class ExchangeRatesFragment : Fragment() {
@@ -52,7 +51,11 @@ class ExchangeRatesFragment : Fragment() {
     private val prefs: Prefs by inject()
     private lateinit var binding: FragmentExchangeRatesBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View =
         FragmentExchangeRatesBinding.inflate(inflater, container, false).also { binding = it }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,10 +71,12 @@ class ExchangeRatesFragment : Fragment() {
                 R.id.refresh -> {
                     viewModel.loadRates()
                 }
+
                 R.id.showLicenses -> {
                     OssLicensesMenuActivity.setActivityTitle(getString(R.string.menu_oss_licenses));
                     startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
                 }
+
                 else -> error("Illegal itemId")
             }
             true
@@ -84,11 +89,13 @@ class ExchangeRatesFragment : Fragment() {
                 is Loading -> {
                     binding.exchangeRateProgress.isVisible = true
                 }
+
                 is Failure -> {
                     binding.ratesRefreshLayout.isRefreshing = false
                     binding.exchangeRateProgress.isVisible = false
                     showRetrySnackbar(it.reason)
                 }
+
                 is Success -> {
                     it.data.fold(HashSet<String>(), { acc, item ->
                         acc.apply { add(item.data.date) }
@@ -110,12 +117,21 @@ class ExchangeRatesFragment : Fragment() {
     private fun showRetrySnackbar(reason: Throwable) {
         when (reason) {
             is HttpException, is UnknownHostException -> {
-                Snackbar.make(binding.coordinator, R.string.loading_error_http, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(
+                    binding.coordinator,
+                    R.string.loading_error_http,
+                    Snackbar.LENGTH_INDEFINITE
+                )
                     .setAction(R.string.retry) { viewModel.loadRates() }
                     .show()
             }
+
             else -> {
-                Snackbar.make(binding.coordinator, R.string.loading_error, Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(
+                    binding.coordinator,
+                    R.string.loading_error,
+                    Snackbar.LENGTH_INDEFINITE
+                )
                     .setAction(R.string.finish) { requireActivity().finish() }
                     .show()
             }
@@ -132,7 +148,15 @@ class ExchangeRatesFragment : Fragment() {
                     .let(manager::getAppWidgetIds)
                     .forEach { id ->
                         prefs.loadWidgetSettings(id)
-                            ?.let { WidgetProvider.updateWidgets(applicationContext, manager, prefs, viewModel.case, it.id) }
+                            ?.let {
+                                WidgetProvider.updateWidgets(
+                                    applicationContext,
+                                    manager,
+                                    prefs,
+                                    viewModel.case,
+                                    it.id
+                                )
+                            }
                             ?: FirebaseCrashlytics.getInstance()
                                 .recordException(IllegalStateException("No settings found for widget $id"))
                     }

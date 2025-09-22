@@ -20,20 +20,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.singleOrNone
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.extractValue
-import xyz.randomcode.xchgrts.entities.*
-import xyz.randomcode.xchgrts.entities.CurrencyListItem.Companion.codeEquals
-import xyz.randomcode.xchgrts.entities.CurrencyListItem.Companion.codeNotEquals
-import xyz.randomcode.xchgrts.entities.CurrencyListItem.Companion.itemSelected
+import xyz.randomcode.xchgrts.entities.CurrencyListItem
+import xyz.randomcode.xchgrts.entities.Failure
+import xyz.randomcode.xchgrts.entities.Loading
+import xyz.randomcode.xchgrts.entities.Resource
+import xyz.randomcode.xchgrts.entities.Success
+import xyz.randomcode.xchgrts.entities.WidgetSettings
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.SingleLiveEvent
 import xyz.randomcode.xchgrts.util.currentValue
-import xyz.randomcode.xchgrts.util.modify
 
 class CurrencySelectionViewModel(
     private val state: SavedStateHandle,
@@ -70,12 +72,12 @@ class CurrencySelectionViewModel(
     }
 
     fun updateItemSelection(letterCode: String) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 currencies.currentValue
                     .flatMap(Resource<List<CurrencyListItem>>::extractValue)
                     .getOrElse { error("List is empty") }
-                    .modify(itemSelected + codeNotEquals(letterCode)) { item ->
+                    .modify(itemSelected compose codeNotEquals(letterCode)) { item ->
                         CurrencyListItem.isSelected.modify(item) { false }
                     }
                     .modify(codeEquals(letterCode)) { item ->
@@ -88,7 +90,7 @@ class CurrencySelectionViewModel(
                     }
                     .let(::Success)
             }.let { withContext(Dispatchers.Main) { currencies.value = it } }
-        }
+        }*/
     }
 
     fun confirmSelection() {

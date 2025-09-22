@@ -1,20 +1,20 @@
 ext {
     versions = [
-            kotlin            : '1.5.30',
+            kotlin            : '2.2.10',
             retrofit          : '2.9.0',
-            room              : '2.3.0',
-            moshi             : '1.12.0',
+            room              : '2.7.2',
+            moshi             : '1.15.2',
             okhttp            : '4.9.0',
-            work              : '2.5.0',
-            arrow             : '0.13.2',
-            world_country_data: '1.5.2',
+            work              : '2.10.3',
+            arrow             : '1.2.4',
+            world_country_data: '1.5.3',
             material          : '1.4.0',
-            preference        : '1.1.1',
+            preference        : '1.2.1',
             annotation        : '1.2.0',
             coroutines        : '1.5.1'
     ]
 
-    libs = [
+    lib = [
             kotlin_stdlib     : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
             kotlinx_datetime  : "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1",
 
@@ -24,8 +24,8 @@ ext {
             okhttp            : "com.squareup.okhttp3:okhttp:$versions.okhttp",
             okhttp_logger     : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
 
-            moshi             : "com.squareup.moshi:moshi:$versions.moshi",
-            moshi_codegen     : "com.squareup.moshi:moshi-kotlin-codegen:1.12.0",
+            moshi        : "com.squareup.moshi:moshi-kotlin:$versions.moshi",
+            moshi_codegen: "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi",
 
             retrofit          : "com.squareup.retrofit2:retrofit:$versions.retrofit",
             retrofit_moshi    : "com.squareup.retrofit2:converter-moshi:$versions.retrofit",

@@ -20,7 +20,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.identity
+import arrow.core.none
+import arrow.core.some
 import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Prism
@@ -31,7 +34,12 @@ import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
 import xyz.randomcode.xchgrts.domain.util.extractValue
-import xyz.randomcode.xchgrts.entities.*
+import xyz.randomcode.xchgrts.entities.ExchangeListItem
+import xyz.randomcode.xchgrts.entities.Failure
+import xyz.randomcode.xchgrts.entities.FavItem
+import xyz.randomcode.xchgrts.entities.Loading
+import xyz.randomcode.xchgrts.entities.Resource
+import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.currentValue
 import xyz.randomcode.xchgrts.util.modify
@@ -44,7 +52,12 @@ class ExchangeRatesViewModel(
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
 
-    private val favItem = Getter<ExchangeListItem, RateListItem> { FavItem(prefs.favCurrencies.contains(it.letterCode), it) }
+    private val favItem = Getter<ExchangeListItem, RateListItem> {
+        FavItem(
+            prefs.favCurrencies.contains(it.letterCode),
+            it
+        )
+    }
 
     private var job: Job? = null
 
@@ -62,7 +75,8 @@ class ExchangeRatesViewModel(
             }
                 .map(this@ExchangeRatesViewModel::mapFavorites)
                 .map(this@ExchangeRatesViewModel::sortFavorites)
-                .bimap(::Failure, ::Success)
+                .map(::Success)
+                .mapLeft(::Failure)
                 .fold(items::setValue, items::setValue)
         }
     }
@@ -92,7 +106,12 @@ class ExchangeRatesViewModel(
                         prefs.favCurrencies + letterCode
                     }
 
-                    items.modify(codeEquals(letterCode)) { isFavorite<ExchangeListItem>().modify(it, Boolean::not) }
+                    items.modify(codeEquals(letterCode)) {
+                        isFavorite<ExchangeListItem>().modify(
+                            it,
+                            Boolean::not
+                        )
+                    }
                         .let(this::sortFavorites)
                         .let(::Success)
                         .let(this.items::setValue)

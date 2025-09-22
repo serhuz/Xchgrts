@@ -24,7 +24,11 @@ import arrow.optics.Iso
 import arrow.optics.PTraversal
 import xyz.randomcode.xchgrts.domain.util.CurrencyInfoProvider
 import xyz.randomcode.xchgrts.domain.util.DateProvider
-import xyz.randomcode.xchgrts.entities.*
+import xyz.randomcode.xchgrts.entities.CurrencyCode
+import xyz.randomcode.xchgrts.entities.CurrencyData
+import xyz.randomcode.xchgrts.entities.CurrencyEntity
+import xyz.randomcode.xchgrts.entities.CurrencyListItem
+import xyz.randomcode.xchgrts.entities.ExchangeListItem
 
 class RateDataUseCase(
     private val api: ExchangeRateApi,

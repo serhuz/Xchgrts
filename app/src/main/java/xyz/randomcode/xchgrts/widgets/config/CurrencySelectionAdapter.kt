@@ -21,8 +21,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import xyz.randomcode.xchgrts.entities.CurrencyListItem
 import xyz.randomcode.xchgrts.databinding.ItemCurrencyBinding
+import xyz.randomcode.xchgrts.entities.CurrencyListItem
 
 class CurrencySelectionAdapter(private val viewModel: CurrencySelectionViewModel) :
     ListAdapter<CurrencyListItem, CurrencyListItemViewHolder>(DIFF_CALLBACK) {

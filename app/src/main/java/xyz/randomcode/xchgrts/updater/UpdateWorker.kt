@@ -20,7 +20,11 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.Dispatchers
@@ -28,9 +32,9 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import retrofit2.HttpException
+import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
-import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.util.concurrent.TimeUnit
@@ -49,10 +53,12 @@ class UpdateWorker(
             try {
                 case.updateRates(DateProvider().currentDate)
                 updateWidgets()
-                FirebaseAnalytics.getInstance(context).logEvent("currency_update_done", Bundle.EMPTY)
+                FirebaseAnalytics.getInstance(context)
+                    .logEvent("currency_update_done", Bundle.EMPTY)
                 Result.success()
             } catch (e: Exception) {
-                FirebaseAnalytics.getInstance(context).logEvent("currency_update_failed", Bundle.EMPTY)
+                FirebaseAnalytics.getInstance(context)
+                    .logEvent("currency_update_failed", Bundle.EMPTY)
                 if (e is HttpException) {
                     Result.retry()
                 } else {
@@ -67,7 +73,15 @@ class UpdateWorker(
             .let(widgetManager::getAppWidgetIds)
             .forEach { id ->
                 prefs.loadWidgetSettings(id)
-                    ?.let { WidgetProvider.updateWidgets(applicationContext, widgetManager, prefs, case, it.id) }
+                    ?.let {
+                        WidgetProvider.updateWidgets(
+                            applicationContext,
+                            widgetManager,
+                            prefs,
+                            case,
+                            it.id
+                        )
+                    }
                     ?: FirebaseCrashlytics.getInstance()
                         .recordException(IllegalStateException("No settings found for widget $id"))
             }

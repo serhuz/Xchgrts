@@ -29,7 +29,7 @@ class DateProvider(private val initialInstant: Instant = Clock.System.now()) {
                 val day = "${it.dayOfMonth}".padStart(2, '0')
                 val month = "${it.monthNumber}".padStart(2, '0')
                 val year = "${it.year}"
-                "$day$month$year"
+                "$day.$month.$year"
             }
 
     val minutesToMidnight: Int

@@ -29,23 +29,24 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import xyz.randomcode.xchgrts.client.JsonParamInterceptor
 import xyz.randomcode.xchgrts.domain.ExchangeRateApi
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
+import xyz.randomcode.xchgrts.domain.XchgrtsDb
 import xyz.randomcode.xchgrts.domain.util.CurrencyInfoProvider
 import xyz.randomcode.xchgrts.domain.util.FlagResourceProvider
 import xyz.randomcode.xchgrts.entities.CurrencyData
 import xyz.randomcode.xchgrts.entities.CurrencyDataJsonAdapter
 import xyz.randomcode.xchgrts.entities.WidgetSettings
-import xyz.randomcode.xchgrts.client.JsonParamInterceptor
-import xyz.randomcode.xchgrts.db.XchgrtsDb
 import xyz.randomcode.xchgrts.main.ExchangeRatesViewModel
 import xyz.randomcode.xchgrts.util.DrawableResProvider
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.config.CurrencySelectionViewModel
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @Suppress("unused")
@@ -109,7 +110,7 @@ class Xchgrts : Application() {
         super.onCreate()
 
         startKoin {
-            androidLogger()
+            androidLogger(Level.ERROR)
             androidContext(applicationContext)
             modules(networkModule, dbModule, appModule)
         }

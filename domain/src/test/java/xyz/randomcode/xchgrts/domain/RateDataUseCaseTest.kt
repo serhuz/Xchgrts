@@ -1,8 +1,17 @@
 package xyz.randomcode.xchgrts.domain
 
 import arrow.optics.Getter
-import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.test.runBlockingTest
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions
 import org.junit.After
 import org.junit.Before
@@ -32,7 +41,7 @@ class RateDataUseCaseTest {
     @Before
     fun setUp() {
         provider = mock {
-            on { this.flagRes } doReturn Getter { R.drawable.globe }
+            on { this.flagRes } doReturn Getter { com.blongho.country_data.R.drawable.globe }
             on { this.currencyName } doReturn Getter { "" }
         }
 
@@ -45,7 +54,7 @@ class RateDataUseCaseTest {
     }
 
     @Test
-    fun returnItems() = runBlockingTest {
+    fun returnItems() = runTest {
         whenever(dao.getByDate(any())).thenReturn(
             listOf(
                 CurrencyEntity(
@@ -61,13 +70,14 @@ class RateDataUseCaseTest {
 
         val actual = case.getRatesForDate("20200101")
 
-        val expected = ExchangeListItem("AAA", 1, "10", R.drawable.globe, "")
+        val expected =
+            ExchangeListItem("AAA", 1, "10", com.blongho.country_data.R.drawable.globe, "")
 
         Assertions.assertThat(actual).hasSize(1).contains(expected, Assertions.atIndex(0))
     }
 
     @Test
-    fun requestItemsWhenNoneAreCached() = runBlockingTest {
+    fun requestItemsWhenNoneAreCached() = runTest {
         whenever(dao.getByDate(any())).thenReturn(emptyList())
         whenever(api.getRates(any())).thenReturn(emptyList())
 
@@ -78,7 +88,7 @@ class RateDataUseCaseTest {
     }
 
     @Test
-    fun storeReceivedItems() = runBlockingTest {
+    fun storeReceivedItems() = runTest {
         whenever(dao.getByDate(any())).thenReturn(emptyList())
         whenever(api.getRates(any())).thenReturn(listOf(CurrencyData("", "", "AAA", "", 1, 10f)))
 
