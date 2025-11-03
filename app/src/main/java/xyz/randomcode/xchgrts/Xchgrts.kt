@@ -20,24 +20,27 @@ import android.app.Application
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
+import dagger.hilt.components.SingletonComponent
 
 @HiltAndroidApp
 class Xchgrts : Application(), Configuration.Provider {
 
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
-
-    override fun getWorkManagerConfiguration() =
-        Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
-
-    companion object {
-        private const val NBU_ADDRESS = "https://bank.gov.ua"
-        private const val DB_NAME = "xchgrts.db"
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface HiltWorkerFactoryEntryPoint {
+        fun workerFactory(): HiltWorkerFactory
     }
+
+    override val workManagerConfiguration =
+        Configuration.Builder()
+            .setWorkerFactory(
+                EntryPoints.get(this, HiltWorkerFactoryEntryPoint::class.java).workerFactory()
+            )
+            .build()
 }
 
 val Context.app: Xchgrts

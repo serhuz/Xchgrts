@@ -28,6 +28,7 @@ import xyz.randomcode.xchgrts.entities.CurrencyCode
 import xyz.randomcode.xchgrts.entities.CurrencyData
 import xyz.randomcode.xchgrts.entities.CurrencyEntity
 import xyz.randomcode.xchgrts.entities.CurrencyListItem
+import xyz.randomcode.xchgrts.entities.CurrentDate
 import xyz.randomcode.xchgrts.entities.ExchangeListItem
 
 class RateDataUseCase(

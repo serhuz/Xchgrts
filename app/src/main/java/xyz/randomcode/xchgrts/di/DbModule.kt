@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import xyz.randomcode.xchgrts.db.XchgrtsDb
 import xyz.randomcode.xchgrts.domain.ExchangeRateDao
+import xyz.randomcode.xchgrts.domain.XchgrtsDb
 
 @Module
 @InstallIn(SingletonComponent::class)
