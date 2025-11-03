@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 
-package xyz.randomcode.xchgrts.domain.util
+package xyz.randomcode.xchgrts.entities
 
-import androidx.annotation.VisibleForTesting
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
 
-abstract class FlagResourceProvider {
+class CurrentDateTest {
 
-    fun getFlagResourceForCurrency(letterCode: String): Int =
-        getFlag(letterCode.substring(0..1))
+    private lateinit var currentDate: CurrentDate
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    abstract fun getFlag(alpha2Code: String): Int
+    @Before
+    fun setUp() {
+        currentDate = CurrentDate("01", "01", "2050")
+    }
 
-    abstract fun fallbackIcon(): Int
+    @Test
+    fun entityDateFormatIsCorrect() {
+        val actual = currentDate.entityFormat
+
+        assertEquals(actual, "01.01.2050")
+    }
+
+    @Test
+    fun requestDateFormatIsCorrect() {
+        val actual = currentDate.requestFormat
+
+        assertEquals(actual, "01012050")
+    }
 }

@@ -20,17 +20,14 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
-import androidx.work.CoroutineWorker
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkerParameters
+import androidx.hilt.work.HiltWorker
+import androidx.work.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import retrofit2.HttpException
 import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
@@ -39,13 +36,13 @@ import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.util.concurrent.TimeUnit
 
-class UpdateWorker(
-    private val context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context.applicationContext, params), KoinComponent {
-
-    private val case: RateDataUseCase by inject()
-    private val prefs: Prefs by inject()
+@HiltWorker
+class UpdateWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted params: WorkerParameters,
+    private val case: RateDataUseCase,
+    private val prefs: Prefs
+) : CoroutineWorker(context.applicationContext, params) {
 
     override suspend fun doWork(): Result =
         withContext(Dispatchers.IO) {

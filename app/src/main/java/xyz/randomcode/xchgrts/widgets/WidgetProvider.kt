@@ -21,36 +21,46 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.RemoteViews
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
 import xyz.randomcode.xchgrts.main.MainActivity
 import xyz.randomcode.xchgrts.util.Prefs
+import javax.inject.Inject
 
-class WidgetProvider : AppWidgetProvider(), KoinComponent {
+@AndroidEntryPoint
+class WidgetProvider : AppWidgetProvider() {
 
-    private val components: ProviderComponents by lazy { ProviderComponents() }
+    @Inject
+    lateinit var useCase: RateDataUseCase
+
+    @Inject
+    lateinit var prefs: Prefs
+
+    private val scope: CoroutineScope by lazy(LazyThreadSafetyMode.NONE) { MainScope() }
 
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
-        try {
-            CoroutineScope(Dispatchers.Default + Job()).launch {
-                updateWidgets(context, manager, components.prefs, components.case, *ids)
-            }
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
+        scope.launch {
+            runCatching { updateWidgets(context, manager, prefs, useCase, *ids) }
+                .onSuccess {
+                    FirebaseAnalytics
+                        .getInstance(context)
+                        .logEvent("Widget_update", Bundle.EMPTY)
+                }
+                .onFailure(FirebaseCrashlytics.getInstance()::recordException)
         }
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        appWidgetIds.forEach(components.prefs::removeSettings)
+        appWidgetIds.forEach(prefs::removeSettings)
     }
 
     companion object {
@@ -68,24 +78,24 @@ class WidgetProvider : AppWidgetProvider(), KoinComponent {
                         PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE)
                     }
 
-                    val exchangeRate = case.getRateForDate(DateProvider().currentDate, it.letterCode)
+                    val exchangeRate =
+                        case.getRateForDate(DateProvider().currentDate, it.letterCode)
 
-                    val views = RemoteViews(context.packageName, R.layout.widget_single_wide).apply {
-                        setOnClickPendingIntent(R.id.widgetLayout, intent)
-                        setTextViewText(R.id.widgetDate, exchangeRate.shortDate)
-                        setTextViewText(R.id.widgetCurrencyUnit, "${exchangeRate.units} ${exchangeRate.letterCode}")
-                        setTextViewText(R.id.widgetRateText, exchangeRate.amount)
-                        setImageViewResource(R.id.widgetFlag, exchangeRate.flagRes)
-                    }
+                    val views =
+                        RemoteViews(context.packageName, R.layout.widget_single_wide).apply {
+                            setOnClickPendingIntent(R.id.widgetLayout, intent)
+                            setTextViewText(R.id.widgetDate, exchangeRate.shortDate)
+                            setTextViewText(
+                                R.id.widgetCurrencyUnit,
+                                "${exchangeRate.units} ${exchangeRate.letterCode}"
+                            )
+                            setTextViewText(R.id.widgetRateText, exchangeRate.amount)
+                            setImageViewResource(R.id.widgetFlag, exchangeRate.flagRes)
+                        }
 
                     manager.updateAppWidget(id, views)
                 }
             }
         }
     }
-}
-
-class ProviderComponents : KoinComponent {
-    val prefs: Prefs by inject()
-    val case: RateDataUseCase by inject()
 }

@@ -1,0 +1,50 @@
+ext {
+    versions = [
+            kotlin            : '1.6.21',
+            retrofit          : '2.9.0',
+            room              : '2.4.2',
+            moshi             : '1.13.0',
+            okhttp            : '4.9.0',
+            work              : '2.7.1',
+            arrow             : '0.13.3',
+            world_country_data: '1.5.3',
+            material          : '1.4.0',
+            preference        : '1.2.0',
+            annotation        : '1.2.0',
+            coroutines        : '1.6.1',
+            hilt              : '2.41'
+    ]
+
+    libs = [
+            kotlin_stdlib     : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+            kotlinx_datetime  : "org.jetbrains.kotlinx:kotlinx-datetime:0.2.1",
+
+            coroutines        : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines",
+            coroutines_test   : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines",
+
+            okhttp            : "com.squareup.okhttp3:okhttp:$versions.okhttp",
+            okhttp_logger     : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
+
+            moshi             : "com.squareup.moshi:moshi:$versions.moshi",
+            moshi_codegen     : "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi",
+
+            retrofit          : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+            retrofit_moshi    : "com.squareup.retrofit2:converter-moshi:$versions.retrofit",
+
+            room              : "androidx.room:room-runtime:$versions.room",
+            room_ktx          : "androidx.room:room-ktx:$versions.room",
+            room_compiler     : "androidx.room:room-compiler:$versions.room",
+
+            work              : "androidx.work:work-runtime-ktx:$versions.work",
+            work_test         : "androidx.work:work-testing:$versions.work",
+
+            arrow             : "io.arrow-kt:arrow-optics:$versions.arrow",
+            arrow_meta        : "io.arrow-kt:arrow-meta:$versions.arrow",
+
+            world_country_data: "com.github.blongho:worldCountryData:$versions.world_country_data",
+
+            material          : "com.google.android.material:material:$versions.material",
+            preference        : "androidx.preference:preference:$versions.preference",
+            annotation        : "androidx.annotation:annotation:$versions.annotation"
+    ]
+}

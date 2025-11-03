@@ -1,18 +1,11 @@
 package xyz.randomcode.xchgrts.domain
 
 import arrow.optics.Getter
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.reset
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -22,8 +15,10 @@ import org.mockito.junit.MockitoJUnitRunner
 import xyz.randomcode.xchgrts.domain.util.CurrencyInfoProvider
 import xyz.randomcode.xchgrts.entities.CurrencyData
 import xyz.randomcode.xchgrts.entities.CurrencyEntity
+import xyz.randomcode.xchgrts.entities.CurrentDate
 import xyz.randomcode.xchgrts.entities.ExchangeListItem
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 class RateDataUseCaseTest {
 
@@ -68,12 +63,12 @@ class RateDataUseCaseTest {
             )
         )
 
-        val actual = case.getRatesForDate("20200101")
+        val actual = case.getRatesForDate(CurrentDate("01", "01", "2020"))
 
         val expected =
             ExchangeListItem("AAA", 1, "10", com.blongho.country_data.R.drawable.globe, "")
 
-        Assertions.assertThat(actual).hasSize(1).contains(expected, Assertions.atIndex(0))
+        assertThat(actual).hasSize(1).contains(expected, Assertions.atIndex(0))
     }
 
     @Test
@@ -81,9 +76,9 @@ class RateDataUseCaseTest {
         whenever(dao.getByDate(any())).thenReturn(emptyList())
         whenever(api.getRates(any())).thenReturn(emptyList())
 
-        case.getRatesForDate("20200101")
+        case.getRatesForDate(CurrentDate("01", "01", "2020"))
 
-        verify(api, times(1)).getRates(eq("20200101"))
+        verify(api, times(1)).getRates(eq("01012020"))
         verify(dao, never()).insertAll(any())
     }
 
@@ -92,11 +87,11 @@ class RateDataUseCaseTest {
         whenever(dao.getByDate(any())).thenReturn(emptyList())
         whenever(api.getRates(any())).thenReturn(listOf(CurrencyData("", "", "AAA", "", 1, 10f)))
 
-        case.getRatesForDate("20200101")
+        case.getRatesForDate(CurrentDate("01", "01", "2020"))
 
         val expected = CurrencyEntity("", "", "AAA", "", 1, "10.0")
 
-        verify(api, times(1)).getRates(eq("20200101"))
+        verify(api, times(1)).getRates(eq("01012020"))
         verify(dao, times(1)).insertAll(argThat { size == 1 && first() == expected })
     }
 }

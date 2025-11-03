@@ -17,9 +17,14 @@
 package xyz.randomcode.xchgrts.util
 
 import android.content.Context
+import dagger.hilt.android.qualifiers.ApplicationContext
+import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.domain.util.FlagResourceProvider
+import javax.inject.Inject
 
-class DrawableResProvider(private val context: Context) : FlagResourceProvider() {
+class DrawableResProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) : FlagResourceProvider() {
 
     override fun getFlag(alpha2Code: String): Int =
         if (alpha2Code == "do") {

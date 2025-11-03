@@ -25,15 +25,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.stateViewModel
 import retrofit2.HttpException
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.databinding.FragmentExchangeRatesBinding
@@ -43,13 +43,17 @@ import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.net.UnknownHostException
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExchangeRatesFragment : Fragment() {
 
-    private val viewModel: ExchangeRatesViewModel by stateViewModel()
+    private val viewModel: ExchangeRatesViewModel by viewModels()
     private val adapter: ExchangeRatesAdapter by lazy { ExchangeRatesAdapter() }
-    private val prefs: Prefs by inject()
     private lateinit var binding: FragmentExchangeRatesBinding
+
+    @Inject
+    lateinit var prefs: Prefs
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,7 +88,7 @@ class ExchangeRatesFragment : Fragment() {
 
         adapter.favUpdate.observe(viewLifecycleOwner, viewModel::updateFavorites)
 
-        viewModel.items.observe(viewLifecycleOwner, {
+        viewModel.items.observe(viewLifecycleOwner) {
             when (it) {
                 is Loading -> {
                     binding.exchangeRateProgress.isVisible = true
@@ -97,9 +101,9 @@ class ExchangeRatesFragment : Fragment() {
                 }
 
                 is Success -> {
-                    it.data.fold(HashSet<String>(), { acc, item ->
+                    it.data.fold(HashSet<String>()) { acc, item ->
                         acc.apply { add(item.data.date) }
-                    })
+                    }
                         .single()
                         .let(binding.exchangeRateToolbar::setTitle)
 
@@ -111,7 +115,7 @@ class ExchangeRatesFragment : Fragment() {
                     updateWidgets()
                 }
             }
-        })
+        }
     }
 
     private fun showRetrySnackbar(reason: Throwable) {

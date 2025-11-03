@@ -61,7 +61,7 @@ class RateDataUseCase(
     suspend fun getCurrencyList(): List<CurrencyListItem> =
         dao.getDistinctCurrencyCodes()
             .ifEmpty {
-                api.getRates(DateProvider().currentDate)
+                api.getRates(DateProvider().currentDate.requestFormat)
                     .map(currencyIso.reverse()::set)
                     .takeIf { it.isNotEmpty() }
                     ?.also { dao.insertAll(it) }
@@ -72,10 +72,10 @@ class RateDataUseCase(
             .let { currencyCodes.modify(it, currencyInfoProvider.listItem::get) }
 
     @WorkerThread
-    suspend fun getRatesForDate(date: String): List<ExchangeListItem> =
-        dao.getByDate(date)
+    suspend fun getRatesForDate(date: CurrentDate): List<ExchangeListItem> =
+        dao.getByDate(date.entityFormat)
             .ifEmpty {
-                api.getRates(date)
+                api.getRates(date.requestFormat)
                     .map(currencyIso.reverse()::set)
                     .takeIf { it.isNotEmpty() }
                     ?.also { entities -> dao.insertAll(entities) }
@@ -85,11 +85,11 @@ class RateDataUseCase(
             .sortedBy(ExchangeListItem::letterCode)
 
     @WorkerThread
-    suspend fun getRateForDate(date: String, letterCode: String): ExchangeListItem =
-        dao.getExchangeRateForCurrency(date, letterCode)
+    suspend fun getRateForDate(date: CurrentDate, letterCode: String): ExchangeListItem =
+        dao.getExchangeRateForCurrency(date.entityFormat, letterCode)
             .toOption()
             .getOrElse {
-                api.getRates(date)
+                api.getRates(date.requestFormat)
                     .map(currencyIso.reverse()::set)
                     .also { entities -> dao.insertAll(entities) }
                     .single { it.letterCode == letterCode }
@@ -97,11 +97,11 @@ class RateDataUseCase(
             .let(listItem::get)
 
     @WorkerThread
-    suspend fun updateRates(date: String) {
-        dao.countForDate(date)
+    suspend fun updateRates(date: CurrentDate) {
+        dao.countForDate(date.entityFormat)
             .takeIf { it == 0 }
             ?.run {
-                api.getRates(date)
+                api.getRates(date.requestFormat)
                     .map(currencyIso.reverse()::set)
                     .let { dao.insertAll(it) }
             }

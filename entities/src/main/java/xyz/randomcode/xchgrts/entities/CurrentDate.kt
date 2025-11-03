@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package xyz.randomcode.xchgrts.domain.util
+package xyz.randomcode.xchgrts.entities
 
-import androidx.annotation.VisibleForTesting
+data class CurrentDate(private val day: String, private val month: String, private val year: String) {
 
-abstract class FlagResourceProvider {
-
-    fun getFlagResourceForCurrency(letterCode: String): Int =
-        getFlag(letterCode.substring(0..1))
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
-    abstract fun getFlag(alpha2Code: String): Int
-
-    abstract fun fallbackIcon(): Int
+    val requestFormat: String = "$day$month$year"
+    val entityFormat: String = "$day.$month.$year"
 }

@@ -27,6 +27,7 @@ import arrow.core.some
 import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Prism
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -43,8 +44,10 @@ import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.currentValue
 import xyz.randomcode.xchgrts.util.modify
+import javax.inject.Inject
 
-class ExchangeRatesViewModel(
+@HiltViewModel
+class ExchangeRatesViewModel @Inject constructor(
     private val state: SavedStateHandle,
     private val prefs: Prefs,
     val case: RateDataUseCase
