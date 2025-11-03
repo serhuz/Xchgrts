@@ -24,16 +24,11 @@ android {
 dependencies {
     api project(':entities')
 
-    api platform("io.arrow-kt:arrow-stack:$versions.arrow")
-    api "io.arrow-kt:arrow-core"
-    api "io.arrow-kt:arrow-optics"
-    ksp "io.arrow-kt:arrow-optics-ksp-plugin:$versions.arrow"
+    api platform(libs.arrow.stack)
+    api libs.bundles.arrow
+    ksp libs.arrow.optics.plugin
 
-    implementation lib.room
-    implementation lib.room_ktx
-    ksp lib.room_compiler
-
-    api lib.kotlinx_datetime
-    implementation lib.world_country_data
-    implementation lib.retrofit
+    api libs.kotlinx.datetime
+    implementation libs.worldCountryData
+    implementation libs.bundles.retrofit
 }

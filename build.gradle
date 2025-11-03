@@ -1,17 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    apply from: 'common/deps.gradle'
-}
 
 plugins {
     alias libs.plugins.android.application apply false
     alias libs.plugins.android.library apply false
-    id 'org.jetbrains.kotlin.android' version '2.2.10' apply false
-    id 'com.google.devtools.ksp' version '2.2.10-2.0.2' apply false
-    id 'com.google.firebase.crashlytics' version '3.0.6' apply false
-    id 'com.google.android.gms.oss-licenses-plugin' version '0.10.7' apply false
-    id 'com.google.gms.google-services' version '4.4.3' apply false
-    id 'com.github.ben-manes.versions' version '0.52.0'
+    alias libs.plugins.kotlin.android apply false
+    alias libs.plugins.google.ksp apply false
+    alias libs.plugins.google.firebase.crashlytics apply false
+    alias libs.plugins.google.licenses apply false
+    alias libs.plugins.google.services apply false
+    alias libs.plugins.versions
 }
 
 tasks.register('clean', Delete) {

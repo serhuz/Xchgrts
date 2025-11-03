@@ -42,35 +42,28 @@ android {
 dependencies {
     implementation project(':domain')
 
-    implementation lib.room
-    implementation lib.room_ktx
-    ksp lib.room_compiler
-
-    implementation lib.moshi
-    ksp lib.moshi_codegen
+    implementation libs.moshi
+    ksp libs.moshi.codegen
 
     implementation libs.koin.android
 
-    implementation lib.retrofit
-    implementation lib.retrofit_moshi
+    implementation libs.bundles.retrofit
+    implementation libs.bundles.okhttp
 
-    implementation lib.okhttp
-    implementation lib.okhttp_logger
+    implementation libs.work
+    implementation libs.preference
+    implementation libs.annotation
+    implementation libs.material
 
-    implementation lib.work
-    implementation lib.preference
-    implementation lib.annotation
-    implementation lib.material
-
-    implementation lib.world_country_data
+    implementation libs.worldCountryData
 
     implementation libs.play.services.oss.licenses
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.2"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.9.2"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.9.2"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.9.2"
+    implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.lifecycle.viewmodel.savedstate
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.common.java8
+    implementation libs.lifecycle.runtime.ktx
 
     implementation libs.recyclerview
     implementation libs.swiperefreshlayout

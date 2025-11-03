@@ -30,14 +30,16 @@ android {
 dependencies {
     coreLibraryDesugaring libs.desugar.jdk.libs
 
-    implementation lib.kotlin_stdlib
-    implementation lib.coroutines
+    implementation libs.coroutines.android
+
+    implementation libs.bundles.room
+    ksp libs.room.compiler
 
     testImplementation libs.junit
     testImplementation libs.assertj.core
     testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
-    testImplementation lib.coroutines_test
+    testImplementation libs.coroutines.test
 
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
