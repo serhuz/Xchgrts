@@ -20,7 +20,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.*
+import arrow.core.Either
+import arrow.core.getOrElse
+import arrow.core.singleOrNone
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,10 +35,10 @@ import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Resource
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.entities.WidgetSettings
+import xyz.randomcode.xchgrts.entities.isSelected
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.SingleLiveEvent
 import xyz.randomcode.xchgrts.util.currentValue
-import xyz.randomcode.xchgrts.util.modify
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +50,7 @@ class CurrencySelectionViewModel @Inject constructor(
 
     val currencies: MutableLiveData<Resource<List<CurrencyListItem>>> = MutableLiveData()
     val hasSelectedItem: MutableLiveData<Boolean> = MutableLiveData(false)
-    val confirmSelection: SingleLiveEvent<Nothing> = SingleLiveEvent()
+    val confirmSelection: SingleLiveEvent<Nothing?> = SingleLiveEvent()
 
     var widgetId: Int = Int.MIN_VALUE
 
@@ -75,16 +77,17 @@ class CurrencySelectionViewModel @Inject constructor(
     }
 
     fun updateItemSelection(letterCode: String) {
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 currencies.currentValue
                     .flatMap(Resource<List<CurrencyListItem>>::extractValue)
                     .getOrElse { error("List is empty") }
-                    .modify(itemSelected compose codeNotEquals(letterCode)) { item ->
-                        CurrencyListItem.isSelected.modify(item) { false }
-                    }
-                    .modify(codeEquals(letterCode)) { item ->
-                        CurrencyListItem.isSelected.modify(item) { true }
+                    .map {
+                        if (it.letterCode == letterCode) {
+                            CurrencyListItem.isSelected.modify(it) { true }
+                        } else {
+                            CurrencyListItem.isSelected.modify(it) { false }
+                        }
                     }
                     .also {
                         withContext(Dispatchers.Main) {
@@ -93,7 +96,7 @@ class CurrencySelectionViewModel @Inject constructor(
                     }
                     .let(::Success)
             }.let { withContext(Dispatchers.Main) { currencies.value = it } }
-        }*/
+        }
     }
 
     fun confirmSelection() {

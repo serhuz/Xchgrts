@@ -17,7 +17,9 @@
 package xyz.randomcode.xchgrts.entities
 
 import arrow.core.identity
+import arrow.core.left
 import arrow.core.none
+import arrow.core.right
 import arrow.core.some
 import arrow.optics.Prism
 import arrow.optics.optics
@@ -35,8 +37,9 @@ data class CurrencyListItem(
 
     companion object {
 
-        val itemSelected = Prism<CurrencyListItem, CurrencyListItem>(
-            getOption = { if (it.isSelected) it.some() else none() },
+        val itemSelected =
+            Prism<CurrencyListItem, CurrencyListItem, CurrencyListItem, CurrencyListItem>(
+                getOrModify = { if (it.isSelected) it.right() else it.left() },
             reverseGet = ::identity
         )
 
@@ -45,7 +48,7 @@ data class CurrencyListItem(
             reverseGet = ::identity
         )
 
-        fun codeEquals(letterCode: String) = Prism<CurrencyListItem, CurrencyListItem>(
+        fun codeEquals(letterCode: String): Prism<CurrencyListItem, CurrencyListItem> = Prism(
             getOption = { if (letterCode == it.letterCode) it.some() else none() },
             reverseGet = ::identity
         )

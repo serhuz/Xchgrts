@@ -23,7 +23,7 @@ import xyz.randomcode.xchgrts.entities.Resource
 import xyz.randomcode.xchgrts.entities.Success
 
 inline fun <T : Resource<*>, reified X> T.takeIfInstance(): X? =
-    if (this is X) this else null
+    this as? X
 
 inline fun <reified R, T : Resource<R>> T.extractIfSuccess(): R? =
     if (this is Success<*>) (this as Success<*>).data as R else null

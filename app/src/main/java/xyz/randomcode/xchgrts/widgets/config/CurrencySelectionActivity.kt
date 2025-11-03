@@ -16,7 +16,6 @@
 
 package xyz.randomcode.xchgrts.widgets.config
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
@@ -55,7 +54,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
             AppWidgetManager.INVALID_APPWIDGET_ID
         )
             ?: AppWidgetManager.INVALID_APPWIDGET_ID
-        setResult(Activity.RESULT_CANCELED)
+        setResult(RESULT_CANCELED)
 
         DataBindingUtil.setContentView<ActivityCurrencySelectionBinding>(
             this,
@@ -146,7 +145,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
                 )
             }
             setResult(
-                Activity.RESULT_OK,
+                RESULT_OK,
                 Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, viewModel.widgetId) }
             )
             finish()
