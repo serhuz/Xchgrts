@@ -1,9 +1,11 @@
 [versions]
-agpVersion = "8.13.0"
+activityComposeVersion = "1.11.0"
+agpVersion = "8.13.1"
 annotationVersion = "1.9.1"
 appcompatVersion = "1.7.1"
 arrowVersion = "1.2.4"
 assertjCoreVersion = "3.27.6"
+composeBomVersion = "2025.11.00"
 constraintlayoutVersion = "2.2.1"
 coreKtxVersion = "1.17.0"
 coroutinesVersion = "1.5.1"
@@ -32,6 +34,8 @@ workVersion = "2.11.0"
 worldCountryDataVersion = "1.5.3"
 
 [libraries]
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
+adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotationVersion" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 arrow-core = { module = "io.arrow-kt:arrow-core" }
@@ -39,6 +43,7 @@ arrow-optics = { module = "io.arrow-kt:arrow-optics" }
 arrow-optics-plugin = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrowVersion" }
 arrow-stack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrowVersion" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertjCoreVersion" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
@@ -58,9 +63,11 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version 
 lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
 lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleVersion" }
 lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
 lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
 material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+material3 = { module = "androidx.compose.material3:material3" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCoreVersion" }
 mockito-kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "mockitoKotlinVersion" }
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiVersion" }
@@ -75,7 +82,10 @@ retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.re
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
+runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata" }
 swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayoutVersion" }
+ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 work = { module = "androidx.work:work-runtime-ktx", version.ref = "workVersion" }
 work-testing = { module = "androidx.work:work-testing", version.ref = "workVersion" }
 worldCountryData = { module = "com.github.blongho:worldCountryData", version.ref = "worldCountryDataVersion" }
@@ -83,6 +93,7 @@ worldCountryData = { module = "com.github.blongho:worldCountryData", version.ref
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
 google-ksp = { id = "com.google.devtools.ksp", version = "2.2.10-2.0.2" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.10.9" }
