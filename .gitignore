@@ -224,7 +224,6 @@ fastlane/test_output
 fastlane/readme.md
 ### macOS template
 # General
-.DS_Store
 .AppleDouble
 .LSOverride
 
@@ -257,3 +256,4 @@ Temporary Items
 /.idea/encodings.xml
 /.idea/codeStyles/
 /config.properties
+/.idea/
