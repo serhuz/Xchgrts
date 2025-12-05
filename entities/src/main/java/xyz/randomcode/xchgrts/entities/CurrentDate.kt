@@ -18,6 +18,6 @@ package xyz.randomcode.xchgrts.entities
 
 data class CurrentDate(private val day: String, private val month: String, private val year: String) {
 
-    val requestFormat: String = "$day$month$year"
+    val requestFormat: String = "$day.$month.$year"
     val entityFormat: String = "$day.$month.$year"
 }

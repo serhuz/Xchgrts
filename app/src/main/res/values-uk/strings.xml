@@ -9,4 +9,5 @@
     <string name="finish">Завершити</string>
     <string name="menu_refresh">Оновити</string>
     <string name="menu_oss_licenses">Ліцензії ПЗ</string>
+    <string name="desc_close">Закрити екран</string>
 </resources>

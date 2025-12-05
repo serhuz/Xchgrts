@@ -32,6 +32,7 @@ roomVersion = "2.7.2"
 swiperefreshlayoutVersion = "1.1.0"
 workVersion = "2.11.0"
 worldCountryDataVersion = "1.5.3"
+uiTextGoogleFontsVersion = "1.9.4"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -89,6 +90,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 work = { module = "androidx.work:work-runtime-ktx", version.ref = "workVersion" }
 work-testing = { module = "androidx.work:work-testing", version.ref = "workVersion" }
 worldCountryData = { module = "com.github.blongho:worldCountryData", version.ref = "worldCountryDataVersion" }
+ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFontsVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agpVersion" }

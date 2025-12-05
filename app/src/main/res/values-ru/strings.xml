@@ -10,4 +10,5 @@
     <string name="finish">Завершить</string>
     <string name="menu_refresh">Обновить</string>
     <string name="menu_oss_licenses">Лицензии ПО</string>
+    <string name="desc_close">Закрыть экран</string>
 </resources>

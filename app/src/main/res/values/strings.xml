@@ -12,4 +12,8 @@
     <string name="finish">Finish</string>
     <string name="menu_refresh">Refresh</string>
     <string name="menu_oss_licenses">OSS Licenses</string>
+
+    <string name="desc_close">Close the screen</string>
+    <string name="desc_flag">Country flag</string>
+    <string name="desc_selection">Selection mark</string>
 </resources>
