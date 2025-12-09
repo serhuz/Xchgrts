@@ -19,6 +19,7 @@ package xyz.randomcode.xchgrts.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.identity
@@ -30,6 +31,10 @@ import arrow.optics.Prism
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
@@ -50,10 +55,21 @@ import javax.inject.Inject
 class ExchangeRatesViewModel @Inject constructor(
     private val state: SavedStateHandle,
     private val prefs: Prefs,
-    val case: RateDataUseCase
+    private val case: RateDataUseCase
 ) : ViewModel() {
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
+
+    val date: Flow<String> = items.asFlow()
+        .filterIsInstance<Success<List<RateListItem>>>()
+        .map { it.data }
+        .map {
+            it.fold(HashSet<String>()) { acc, item ->
+                acc.apply { add(item.data.date) }
+            }.single()
+        }
+        .catch { emit("") }
+
 
     private val favItem = Getter<ExchangeListItem, RateListItem> {
         FavItem(

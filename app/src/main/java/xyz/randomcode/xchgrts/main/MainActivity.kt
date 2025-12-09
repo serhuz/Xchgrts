@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.R
+import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.util.Prefs
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var prefs: Prefs
+
+    @Inject
+    lateinit var case: RateDataUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -84,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                                     applicationContext,
                                     manager,
                                     prefs,
-                                    viewModel.case,
+                                    case,
                                     it.id
                                 )
                             }

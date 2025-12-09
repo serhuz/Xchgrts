@@ -46,6 +46,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -87,7 +88,13 @@ fun MainScreen(
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
-                MainScreenToolbar(scrollBehavior = scrollBehavior, licenseAction = licenseAction)
+                val title =
+                    viewModel.date.collectAsState(stringResource(R.string.app_name)).value
+                MainScreenToolbar(
+                    scrollBehavior = scrollBehavior,
+                    title = title,
+                    licenseAction = licenseAction
+                )
             }
         ) { contentPadding ->
             val state = viewModel.items.observeAsState()
@@ -168,12 +175,13 @@ fun MainScreen(
 @Composable
 fun MainScreenToolbar(
     scrollBehavior: TopAppBarScrollBehavior,
-    licenseAction: () -> Unit = {}
+    licenseAction: () -> Unit = {},
+    title: String = ""
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.app_name),
+                text = title.ifEmpty { stringResource(R.string.app_name) },
                 color = MaterialTheme.colorScheme.onPrimary
             )
         },
