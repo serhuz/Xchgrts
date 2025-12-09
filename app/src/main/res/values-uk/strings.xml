@@ -10,4 +10,8 @@
     <string name="menu_refresh">Оновити</string>
     <string name="menu_oss_licenses">Ліцензії ПЗ</string>
     <string name="desc_close">Закрити екран</string>
+    <string name="desc_flag">Прапор країни</string>
+    <string name="desc_selection">Відмічено</string>
+    <string name="desc_license">Подивитись ліцензиї ПЗ</string>
+    <string name="desc_favorite">Улюблена валюта</string>
 </resources>
