@@ -92,9 +92,9 @@ fun CurrencySelectionScreen(
                     .fillMaxSize()
             ) {
                 val state = viewModel.currencies.observeAsState()
-                when (state.value) {
+                when (val resource = state.value) {
                     is Failure -> {
-                        val reason = (state.value as Failure).reason
+                        val reason = resource.reason
                         val message: String
                         val action: String
                         when (reason) {
@@ -132,7 +132,7 @@ fun CurrencySelectionScreen(
                     is Success<List<CurrencyListItem>> -> {
                         val hasSelectedItem = viewModel.hasSelectedItem.observeAsState(false)
                         CurrencySelectionContent(
-                            data = (state.value as Success<List<CurrencyListItem>>).data,
+                            data = resource.data,
                             hasSelectedItem = hasSelectedItem.value,
                             buttonModifier = Modifier.align(Alignment.BottomCenter),
                             selectionAction = viewModel::updateItemSelection,
