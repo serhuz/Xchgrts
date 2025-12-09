@@ -48,14 +48,17 @@ class WidgetProvider : AppWidgetProvider() {
     private val scope: CoroutineScope by lazy(LazyThreadSafetyMode.NONE) { MainScope() }
 
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
-        scope.launch {
-            runCatching { updateWidgets(context, manager, prefs, useCase, *ids) }
-                .onSuccess {
-                    FirebaseAnalytics
-                        .getInstance(context)
-                        .logEvent("Widget_update", Bundle.EMPTY)
-                }
-                .onFailure(FirebaseCrashlytics.getInstance()::recordException)
+        goAsync().also { pendingResult ->
+            scope.launch {
+                runCatching { updateWidgets(context, manager, prefs, useCase, *ids) }
+                    .onSuccess {
+                        FirebaseAnalytics
+                            .getInstance(context)
+                            .logEvent("Widget_update", Bundle.EMPTY)
+                    }
+                    .onFailure(FirebaseCrashlytics.getInstance()::recordException)
+                pendingResult.finish()
+            }
         }
     }
 
