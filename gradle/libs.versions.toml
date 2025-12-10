@@ -102,6 +102,7 @@ google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version =
 google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
+room = { id = "androidx.room", version.ref = "roomVersion" }
 versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
 
 
