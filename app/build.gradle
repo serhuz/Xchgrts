@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.randomcode.xchgrts"
-        versionCode 3
+        versionCode 4
         versionName "1.0"
 
         buildConfigField "String", "UPDATE_WORK_NAME", '"updater"'
