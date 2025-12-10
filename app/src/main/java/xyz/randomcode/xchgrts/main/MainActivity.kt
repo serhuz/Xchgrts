@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var prefs: Prefs
 
     @Inject
-    lateinit var case: RateDataUseCase
+    lateinit var rateDataUseCase: RateDataUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                                     applicationContext,
                                     manager,
                                     prefs,
-                                    case,
+                                    rateDataUseCase,
                                     it.id
                                 )
                             }
