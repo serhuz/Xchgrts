@@ -12,6 +12,10 @@ plugins {
 
 apply from: '../common/common.gradle'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     namespace = 'xyz.randomcode.xchgrts'
     compileSdkVersion 36
@@ -30,12 +34,23 @@ android {
         compose true
     }
 
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile rootProject.file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix '.dbg'
             versionNameSuffix '-dbg'
         }
         release {
+            debuggable false
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
