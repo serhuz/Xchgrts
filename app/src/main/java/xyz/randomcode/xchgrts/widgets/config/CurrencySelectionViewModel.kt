@@ -36,6 +36,7 @@ import xyz.randomcode.xchgrts.entities.Resource
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.entities.WidgetSettings
 import xyz.randomcode.xchgrts.entities.isSelected
+import xyz.randomcode.xchgrts.util.ErrorLogger
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.SingleLiveEvent
 import xyz.randomcode.xchgrts.util.currentValue
@@ -45,7 +46,8 @@ import javax.inject.Inject
 class CurrencySelectionViewModel @Inject constructor(
     private val state: SavedStateHandle,
     val case: RateDataUseCase,
-    val prefs: Prefs
+    val prefs: Prefs,
+    private val logger: ErrorLogger
 ) : ViewModel() {
 
     val currencies: MutableLiveData<Resource<List<CurrencyListItem>>> = MutableLiveData()
@@ -70,6 +72,7 @@ class CurrencySelectionViewModel @Inject constructor(
                     }
                     .also { state[ITEMS] = it }
             }
+                .onLeft(logger::logError)
                 .mapLeft(::Failure)
                 .map(::Success)
                 .fold(currencies::setValue, currencies::setValue)

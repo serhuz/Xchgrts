@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Sergei Munovarov
+ * Copyright 2025 Sergei Munovarov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package xyz.randomcode.xchgrts.databind
+package xyz.randomcode.xchgrts.util
 
-import android.widget.ImageView
-import androidx.core.content.ContextCompat
-import androidx.databinding.BindingAdapter
+interface ErrorLogger {
 
-@BindingAdapter("imageRes")
-fun ImageView.setImageFromRes(resId: Int) {
-    ContextCompat.getDrawable(context, resId)?.let(this::setImageDrawable)
+    fun logError(t: Throwable, message: String? = null)
 }

@@ -46,6 +46,7 @@ import xyz.randomcode.xchgrts.entities.FavItem
 import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Resource
 import xyz.randomcode.xchgrts.entities.Success
+import xyz.randomcode.xchgrts.util.ErrorLogger
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.util.currentValue
 import xyz.randomcode.xchgrts.util.modify
@@ -55,7 +56,8 @@ import javax.inject.Inject
 class ExchangeRatesViewModel @Inject constructor(
     private val state: SavedStateHandle,
     private val prefs: Prefs,
-    private val case: RateDataUseCase
+    private val case: RateDataUseCase,
+    private val logger: ErrorLogger
 ) : ViewModel() {
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
@@ -94,6 +96,7 @@ class ExchangeRatesViewModel @Inject constructor(
             }
                 .map(this@ExchangeRatesViewModel::mapFavorites)
                 .map(this@ExchangeRatesViewModel::sortFavorites)
+                .onLeft(logger::logError)
                 .map(::Success)
                 .mapLeft(::Failure)
                 .fold(items::setValue, items::setValue)
