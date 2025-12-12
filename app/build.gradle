@@ -29,7 +29,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding true
         compose true
     }
 
@@ -62,8 +61,6 @@ dependencies {
     implementation libs.moshi
     ksp libs.moshi.codegen
 
-    implementation libs.koin.android
-
     implementation libs.bundles.retrofit
     implementation libs.bundles.okhttp
 
@@ -87,11 +84,9 @@ dependencies {
     ksp libs.hilt.compiler
 
     implementation libs.recyclerview
-    implementation libs.swiperefreshlayout
 
     implementation libs.core.ktx
     implementation libs.appcompat
-    implementation libs.constraintlayout
     implementation libs.ui.text.google.fonts
 
     implementation platform(libs.firebase.bom)
