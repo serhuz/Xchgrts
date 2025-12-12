@@ -16,19 +16,20 @@
 
 package xyz.randomcode.xchgrts.domain.util
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
 import xyz.randomcode.xchgrts.entities.CurrentDate
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class DateProvider(private val initialInstant: Instant = Clock.System.now()) {
 
     val currentDate: CurrentDate
         get() = initialInstant.toLocalDateTime(ZONE_UA)
             .let {
-                val day = "${it.dayOfMonth}".padStart(2, '0')
-                val month = "${it.monthNumber}".padStart(2, '0')
+                val day = "${it.day}".padStart(2, '0')
+                val month = "${it.month.number}".padStart(2, '0')
                 val year = "${it.year}"
                 CurrentDate(day, month, year)
             }
