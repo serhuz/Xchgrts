@@ -17,9 +17,9 @@
 package xyz.randomcode.xchgrts
 
 import android.app.Application
-import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -40,8 +40,14 @@ class Xchgrts : Application(), Configuration.Provider {
             .setWorkerFactory(
                 EntryPoints.get(this, HiltWorkerFactoryEntryPoint::class.java).workerFactory()
             )
+            .setInitializationExceptionHandler {
+                FirebaseCrashlytics.getInstance().recordException(it)
+            }
+            .setWorkerInitializationExceptionHandler {
+                FirebaseCrashlytics.getInstance().recordException(it.throwable)
+            }
+            .setWorkerExecutionExceptionHandler {
+                FirebaseCrashlytics.getInstance().recordException(it.throwable)
+            }
             .build()
 }
-
-val Context.app: Xchgrts
-    get() = applicationContext as Xchgrts
