@@ -21,7 +21,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
 import androidx.hilt.work.HiltWorker
-import androidx.work.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
@@ -32,6 +36,7 @@ import retrofit2.HttpException
 import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
+import xyz.randomcode.xchgrts.util.ErrorLogger
 import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.WidgetProvider
 import java.util.concurrent.TimeUnit
@@ -41,7 +46,8 @@ class UpdateWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted params: WorkerParameters,
     private val case: RateDataUseCase,
-    private val prefs: Prefs
+    private val prefs: Prefs,
+    private val logger: ErrorLogger
 ) : CoroutineWorker(context.applicationContext, params) {
 
     override suspend fun doWork(): Result =
@@ -56,6 +62,7 @@ class UpdateWorker @AssistedInject constructor(
             } catch (e: Exception) {
                 FirebaseAnalytics.getInstance(context)
                     .logEvent("currency_update_failed", Bundle.EMPTY)
+                logger.logError(e)
                 if (e is HttpException) {
                     Result.retry()
                 } else {
