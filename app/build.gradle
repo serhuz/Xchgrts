@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     alias libs.plugins.android.application
     id 'kotlin-android'
@@ -15,6 +17,12 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
+static def getDate() {
+    def df = new SimpleDateFormat("yyyy.MM.dd-H'h'mm")
+    df.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"))
+    return df.format(new Date())
+}
+
 android {
     namespace = 'xyz.randomcode.xchgrts'
     compileSdkVersion 36
@@ -26,6 +34,8 @@ android {
 
         buildConfigField "String", "UPDATE_WORK_NAME", '"updater"'
         buildConfigField "String", "UPDATE_WORK_TAG", '"update_rates"'
+
+        setProperty("archivesBaseName", "app-${versionName}_${versionCode}-${getDate()}")
     }
 
     buildFeatures {
