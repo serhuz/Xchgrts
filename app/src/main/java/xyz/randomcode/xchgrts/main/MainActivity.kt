@@ -16,27 +16,23 @@
 
 package xyz.randomcode.xchgrts.main
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.util.Prefs
-import xyz.randomcode.xchgrts.widgets.WidgetProvider
+import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -76,26 +72,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateWidgets() {
         lifecycleScope.launch {
-            val manager = AppWidgetManager.getInstance(applicationContext)
-
-            withContext(Dispatchers.IO) {
-                ComponentName(applicationContext, WidgetProvider::class.java)
-                    .let(manager::getAppWidgetIds)
-                    .forEach { id ->
-                        prefs.loadWidgetSettings(id)
-                            ?.let {
-                                WidgetProvider.updateWidgets(
-                                    applicationContext,
-                                    manager,
-                                    prefs,
-                                    rateDataUseCase,
-                                    it.id
-                                )
-                            }
-                            ?: FirebaseCrashlytics.getInstance()
-                                .recordException(IllegalStateException("No settings found for widget $id"))
-                    }
-            }
+            ExchangeRateWidget().updateAll(applicationContext)
         }
     }
 }

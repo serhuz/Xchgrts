@@ -16,10 +16,9 @@
 
 package xyz.randomcode.xchgrts.updater
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
+import androidx.glance.appwidget.updateAll
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -27,7 +26,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -37,8 +35,7 @@ import xyz.randomcode.xchgrts.BuildConfig
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.domain.util.DateProvider
 import xyz.randomcode.xchgrts.util.ErrorLogger
-import xyz.randomcode.xchgrts.util.Prefs
-import xyz.randomcode.xchgrts.widgets.WidgetProvider
+import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -46,7 +43,6 @@ class UpdateWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted params: WorkerParameters,
     private val case: RateDataUseCase,
-    private val prefs: Prefs,
     private val logger: ErrorLogger
 ) : CoroutineWorker(context.applicationContext, params) {
 
@@ -72,24 +68,7 @@ class UpdateWorker @AssistedInject constructor(
         }
 
     private suspend fun updateWidgets() {
-        val widgetManager = AppWidgetManager.getInstance(applicationContext)
-        ComponentName(applicationContext, WidgetProvider::class.java)
-            .let(widgetManager::getAppWidgetIds)
-            .forEach { id ->
-                prefs.loadWidgetSettings(id)
-                    ?.let {
-                        WidgetProvider.updateWidgets(
-                            applicationContext,
-                            widgetManager,
-                            prefs,
-                            case,
-                            it.id
-                        )
-                    }
-                    ?: FirebaseCrashlytics.getInstance()
-                        .recordException(IllegalStateException("No settings found for widget $id"))
-            }
-
+        ExchangeRateWidget().updateAll(context)
     }
 
     companion object {

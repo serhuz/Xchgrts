@@ -3,7 +3,7 @@
     android:configure="xyz.randomcode.xchgrts.widgets.config.CurrencySelectionActivity"
     android:description="@string/widget_description"
     android:minWidth="250dp"
-    android:minHeight="40dp"
+    android:minHeight="48dp"
     android:previewImage="@drawable/ic_pic_preview_single"
     android:previewLayout="@layout/widget_single_wide"
     android:resizeMode="horizontal"

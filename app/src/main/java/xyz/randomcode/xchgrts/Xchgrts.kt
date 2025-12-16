@@ -17,6 +17,10 @@
 package xyz.randomcode.xchgrts
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -51,3 +55,5 @@ class Xchgrts : Application(), Configuration.Provider {
             }
             .build()
 }
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")

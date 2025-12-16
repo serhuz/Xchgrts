@@ -23,13 +23,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import xyz.randomcode.xchgrts.updater.UpdateWorker
-import xyz.randomcode.xchgrts.widgets.WidgetProvider
+import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
 
 @AndroidEntryPoint
 class CurrencySelectionActivity : AppCompatActivity() {
@@ -57,15 +56,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
 
     private fun updateWidget() {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                WidgetProvider.updateWidgets(
-                    this@CurrencySelectionActivity,
-                    AppWidgetManager.getInstance(this@CurrencySelectionActivity),
-                    viewModel.prefs,
-                    viewModel.case,
-                    viewModel.widgetId
-                )
-            }
+            ExchangeRateWidget().updateAll(applicationContext)
             setResult(
                 RESULT_OK,
                 Intent().apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, viewModel.widgetId) }

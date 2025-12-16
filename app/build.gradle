@@ -78,6 +78,7 @@ dependencies {
     implementation libs.preference
     implementation libs.annotation
     implementation libs.material
+    implementation libs.datastore.preferences
 
     implementation libs.worldCountryData
 
@@ -108,6 +109,9 @@ dependencies {
     androidTestImplementation composeBom
 
     implementation libs.material3
+
+    implementation libs.glance
+    implementation libs.glance.appwidget
 
     // Android Studio Preview support
     implementation libs.ui.tooling.preview

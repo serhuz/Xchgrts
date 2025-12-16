@@ -45,8 +45,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrencySelectionViewModel @Inject constructor(
     private val state: SavedStateHandle,
-    val case: RateDataUseCase,
-    val prefs: Prefs,
+    private val case: RateDataUseCase,
+    private val prefs: Prefs,
     private val logger: ErrorLogger
 ) : ViewModel() {
 
@@ -103,17 +103,19 @@ class CurrencySelectionViewModel @Inject constructor(
     }
 
     fun confirmSelection() {
-        currencies.currentValue
-            .flatMap(Resource<List<CurrencyListItem>>::extractValue)
-            .flatMap { it.singleOrNone(CurrencyListItem::isSelected) }
-            .map(CurrencyListItem::letterCode)
-            .fold(
-                { error("No selected currency") },
-                {
-                    prefs.storeWidgetSettings(WidgetSettings(widgetId, it))
-                    confirmSelection.call()
-                }
-            )
+        viewModelScope.launch {
+            currencies.currentValue
+                .flatMap(Resource<List<CurrencyListItem>>::extractValue)
+                .flatMap { it.singleOrNone(CurrencyListItem::isSelected) }
+                .map(CurrencyListItem::letterCode)
+                .fold(
+                    { error("No selected currency") },
+                    {
+                        prefs.storeWidgetSettings(WidgetSettings(widgetId, it))
+                        confirmSelection.call()
+                    }
+                )
+        }
     }
 
     companion object {

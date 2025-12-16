@@ -34,7 +34,7 @@
             android:theme="@style/Theme.Xchgrts.License" />
 
         <receiver
-            android:name=".widgets.WidgetProvider"
+            android:name=".widgets.WidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

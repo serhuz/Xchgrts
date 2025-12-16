@@ -18,13 +18,23 @@ package xyz.randomcode.xchgrts.util
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.squareup.moshi.JsonAdapter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import xyz.randomcode.xchgrts.entities.WidgetSettings
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class Prefs @Inject constructor(
     private val preferences: SharedPreferences,
-    private val adapter: JsonAdapter<WidgetSettings>
+    private val dataStore: DataStore<Preferences>,
+    private val adapter: JsonAdapter<WidgetSettings>,
+    private val logger: ErrorLogger
 ) {
 
     var favCurrencies: Set<String>
@@ -42,20 +52,28 @@ class Prefs @Inject constructor(
     fun loadFavoriteCurrencies(): Set<String> =
         preferences.getStringSet(KEY_FAV_CURRENCIES, emptySet()) ?: emptySet()
 
-    fun storeWidgetSettings(settings: WidgetSettings) {
-        preferences.edit {
-            putString(generatePrefId(settings.id), adapter.toJson(settings))
+    suspend fun storeWidgetSettings(settings: WidgetSettings) {
+        runCatching {
+            dataStore.edit {
+                it[generatePrefId(settings.id)] = adapter.toJson(settings)
+            }
+        }.onFailure(logger::logError)
+    }
+
+    fun loadWidgetSettings(id: Int): Flow<WidgetSettings?> =
+        dataStore.data.map {
+            it[generatePrefId(id)]?.let(adapter::fromJson)
         }
+
+    suspend fun removeSettings(id: Int) {
+        runCatching {
+            dataStore.edit {
+                it.remove(generatePrefId(id))
+            }
+        }.onFailure(logger::logError)
     }
 
-    fun loadWidgetSettings(id: Int): WidgetSettings? =
-        preferences.getString(generatePrefId(id), null)?.let(adapter::fromJson)
-
-    fun removeSettings(id: Int) {
-        preferences.edit { remove(generatePrefId(id)) }
-    }
-
-    private fun generatePrefId(id: Int) = "${KEY_WIDGET_CODE}_${id}"
+    private fun generatePrefId(id: Int) = stringPreferencesKey("${KEY_WIDGET_CODE}_${id}")
 
     companion object {
         private const val KEY_WIDGET_CODE = "widget_code"
