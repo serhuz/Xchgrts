@@ -1,0 +1,4 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('parser-debug.aar'))
+artifacts.add("default", file('ui-viewmodel-debug.aar'))
+artifacts.add("default", file('ui-compose-material3-debug.aar'))

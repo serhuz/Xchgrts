@@ -67,6 +67,7 @@ android {
 
 dependencies {
     implementation project(':domain')
+    implementation project(':oss-licenses-android')
 
     implementation libs.moshi
     ksp libs.moshi.codegen
@@ -83,6 +84,7 @@ dependencies {
     implementation libs.worldCountryData
 
     implementation libs.play.services.oss.licenses
+//    implementation "io.github.droibit.oss-licenses-android:ui-compose-material3:0.9.0"
 
     implementation libs.lifecycle.viewmodel.ktx
     implementation libs.lifecycle.viewmodel.savedstate
@@ -109,6 +111,9 @@ dependencies {
     androidTestImplementation composeBom
 
     implementation libs.material3
+    implementation libs.material.icons.core
+    implementation libs.material.icons.extended
+    implementation "androidx.compose.material3.adaptive:adaptive-navigation"
 
     implementation libs.glance
     implementation libs.glance.appwidget

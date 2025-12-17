@@ -16,7 +16,6 @@
 
 package xyz.randomcode.xchgrts.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,10 +23,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.github.droibit.oss_licenses.ui.compose.material3.OssLicensesActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
@@ -54,8 +52,7 @@ class MainActivity : AppCompatActivity() {
             MainScreen(
                 viewModel = viewModel,
                 licenseAction = {
-                    OssLicensesMenuActivity.setActivityTitle(getString(R.string.menu_oss_licenses));
-                    startActivity(Intent(applicationContext, OssLicensesMenuActivity::class.java))
+                    startActivity(OssLicensesActivity.createIntent(this))
                 },
                 closeAction = { finish() }
             )
