@@ -1,7 +1,16 @@
 package xyz.randomcode.xchgrts.domain
 
 import arrow.optics.Getter
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argThat
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions
@@ -78,7 +87,7 @@ class RateDataUseCaseTest {
 
         case.getRatesForDate(CurrentDate("01", "01", "2020"))
 
-        verify(api, times(1)).getRates(eq("01012020"))
+        verify(api, times(1)).getRates(eq("01.01.2020"))
         verify(dao, never()).insertAll(any())
     }
 
@@ -91,7 +100,7 @@ class RateDataUseCaseTest {
 
         val expected = CurrencyEntity("", "", "AAA", "", 1, "10.0")
 
-        verify(api, times(1)).getRates(eq("01012020"))
+        verify(api, times(1)).getRates(eq("01.01.2020"))
         verify(dao, times(1)).insertAll(argThat { size == 1 && first() == expected })
     }
 }
