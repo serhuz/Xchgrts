@@ -10,6 +10,7 @@ coreKtxVersion = "1.17.0"
 coroutinesVersion = "1.10.2"
 datastorePreferencesVersion = "1.2.0"
 desugar_jdk_libsVersion = "2.1.5"
+detekt = "1.23.8"
 espressoCoreVersion = "3.7.0"
 firebaseBomVersion = "34.7.0"
 glanceVersion = "1.2.0-rc01"
@@ -97,6 +98,7 @@ ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-f
 android-application = { id = "com.android.application", version.ref = "agpVersion" }
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
+detekt-plugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version = "2.3.3" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.10.10" }

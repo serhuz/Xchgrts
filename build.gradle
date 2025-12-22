@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
@@ -12,8 +14,21 @@ plugins {
     alias libs.plugins.versions
     alias libs.plugins.hilt apply false
     alias libs.plugins.room apply false
+    alias libs.plugins.detekt.plugin //apply false
 }
 
 tasks.register('clean', Delete) {
     delete rootProject.layout.buildDirectory
+}
+
+tasks.register('detektAll', Detekt) {
+    parallel = true
+    source = files(projectDir)
+    exclude "**/androidTest/**"
+    include "**/*.kt"
+    include "**/*.kts"
+    exclude "**/resources/**"
+    exclude "**/build/**"
+    config.setFrom(files("$rootDir/common/detekt.yml"))
+    buildUponDefaultConfig = false
 }

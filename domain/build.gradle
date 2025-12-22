@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'androidx.room'
+    alias libs.plugins.detekt.plugin
 }
 
 apply from: '../common/common.gradle'

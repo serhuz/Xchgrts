@@ -2,6 +2,7 @@ plugins {
     alias libs.plugins.android.library
     id 'kotlin-android'
     id 'com.google.devtools.ksp'
+    alias libs.plugins.detekt.plugin
 }
 
 apply from: '../common/common.gradle'

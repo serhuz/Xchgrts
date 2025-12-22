@@ -40,5 +40,13 @@ jobs:
         GS: ${{ secrets.GOOGLE_SERVICES }}
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Run detekt
+      run: ./gradlew detektAll
     - name: Run tests
       run: ./gradlew testDebugUnitTest
+    - uses: actions/upload-artifact@v4
+      with:
+        name: detekt
+        path: build/reports/detekt/detekt.txt
+        retention-days: 5
+        overwrite: true

@@ -57,7 +57,7 @@ import xyz.randomcode.xchgrts.domain.util.DateProvider
 import xyz.randomcode.xchgrts.entities.ExchangeListItem
 import xyz.randomcode.xchgrts.main.MainActivity
 
-class ExchangeRateWidget() : GlanceAppWidget() {
+class ExchangeRateWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val entryPoint = EntryPoints.get<WidgetEntryPoint>(context, WidgetEntryPoint::class.java)
