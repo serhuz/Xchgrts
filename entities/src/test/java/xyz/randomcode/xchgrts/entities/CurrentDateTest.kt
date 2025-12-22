@@ -40,6 +40,6 @@ class CurrentDateTest {
     fun requestDateFormatIsCorrect() {
         val actual = currentDate.requestFormat
 
-        assertEquals(actual, "01012050")
+        assertEquals(actual, "01.01.2050")
     }
 }
