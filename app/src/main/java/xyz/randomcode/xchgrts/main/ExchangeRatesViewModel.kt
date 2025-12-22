@@ -17,7 +17,6 @@
 package xyz.randomcode.xchgrts.main
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
@@ -54,7 +53,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExchangeRatesViewModel @Inject constructor(
-    private val state: SavedStateHandle,
     private val prefs: Prefs,
     private val case: RateDataUseCase,
     private val logger: ErrorLogger

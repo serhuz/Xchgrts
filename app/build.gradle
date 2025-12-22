@@ -9,6 +9,7 @@ plugins {
     id 'com.google.android.gms.oss-licenses-plugin'
     id 'dagger.hilt.android.plugin'
     alias libs.plugins.compose.compiler
+    alias libs.plugins.detekt.plugin
 }
 
 apply from: '../common/common.gradle'
@@ -63,6 +64,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+detekt {
+    config.setFrom(file(rootProject.file("common/detekt.yml")))
+    buildUponDefaultConfig = false
+    autoCorrect = false
 }
 
 dependencies {
