@@ -13,14 +13,15 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import strikt.api.expectThat
+import strikt.assertions.contains
+import strikt.assertions.hasSize
 import xyz.randomcode.xchgrts.domain.util.CurrencyInfoProvider
 import xyz.randomcode.xchgrts.entities.CurrencyData
 import xyz.randomcode.xchgrts.entities.CurrencyEntity
@@ -77,7 +78,7 @@ class RateDataUseCaseTest {
         val expected =
             ExchangeListItem("AAA", 1, "10", com.blongho.country_data.R.drawable.globe, "")
 
-        assertThat(actual).hasSize(1).contains(expected, Assertions.atIndex(0))
+        expectThat(actual).hasSize(1).contains(expected)
     }
 
     @Test

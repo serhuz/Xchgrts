@@ -32,8 +32,6 @@ data class CurrencyListItem(
     val flagId: Int,
     val isSelected: Boolean = false
 ) {
-    val stableId: Long
-        get() = numberCode.toLong()
 
     companion object {
 
