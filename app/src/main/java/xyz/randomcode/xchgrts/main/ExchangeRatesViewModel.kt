@@ -28,6 +28,7 @@ import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Prism
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -52,11 +53,19 @@ import xyz.randomcode.xchgrts.util.modify
 import javax.inject.Inject
 
 @HiltViewModel
-class ExchangeRatesViewModel @Inject constructor(
+class ExchangeRatesViewModel(
     private val prefs: Prefs,
     private val case: RateDataUseCase,
-    private val logger: ErrorLogger
+    private val logger: ErrorLogger,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
+
+    @Inject
+    constructor(
+        prefs: Prefs,
+        case: RateDataUseCase,
+        logger: ErrorLogger
+    ) : this(prefs, case, logger, Dispatchers.IO)
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
 
@@ -80,20 +89,17 @@ class ExchangeRatesViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    init {
-        loadRates()
-    }
-
     fun loadRates() {
+        job?.cancel()
         job = viewModelScope.launch {
             items.value = Loading
             Either.catch {
-                withContext(Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     case.getRatesForDate(DateProvider().currentDate)
                 }
             }
-                .map(this@ExchangeRatesViewModel::mapFavorites)
-                .map(this@ExchangeRatesViewModel::sortFavorites)
+                .map(::mapFavorites)
+                .map(::sortFavorites)
                 .onLeft(logger::logError)
                 .map(::Success)
                 .mapLeft(::Failure)

@@ -79,6 +79,8 @@ fun MainScreen(
     licenseAction: () -> Unit = {},
     closeAction: () -> Unit = {}
 ) {
+    LaunchedEffect("load_data") { viewModel.loadRates() }
+
     AppTheme {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         val snackbarHostState = remember { SnackbarHostState() }

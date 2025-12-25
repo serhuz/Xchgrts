@@ -16,6 +16,8 @@
 
 package xyz.randomcode.xchgrts.widgets.config
 
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.Companion.PRIVATE
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -24,6 +26,7 @@ import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.core.singleOrNone
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,12 +46,22 @@ import xyz.randomcode.xchgrts.util.currentValue
 import javax.inject.Inject
 
 @HiltViewModel
-class CurrencySelectionViewModel @Inject constructor(
+class CurrencySelectionViewModel(
     private val state: SavedStateHandle,
     private val case: RateDataUseCase,
     private val prefs: Prefs,
-    private val logger: ErrorLogger
+    private val logger: ErrorLogger,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
+
+    @Inject
+    constructor(
+        state: SavedStateHandle,
+        case: RateDataUseCase,
+        prefs: Prefs,
+        logger: ErrorLogger
+    ) : this(state, case, prefs, logger, Dispatchers.IO, Dispatchers.Default)
 
     val currencies: MutableLiveData<Resource<List<CurrencyListItem>>> = MutableLiveData()
     val hasSelectedItem: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -56,17 +69,13 @@ class CurrencySelectionViewModel @Inject constructor(
 
     var widgetId: Int = Int.MIN_VALUE
 
-    init {
-        loadCurrencyList()
-    }
-
     fun loadCurrencyList() {
         viewModelScope.launch {
             Either.catch {
                 currencies.value = Loading
                 state.get<List<CurrencyListItem>>(ITEMS).orEmpty()
                     .ifEmpty {
-                        withContext(Dispatchers.IO) {
+                        withContext(ioDispatcher) {
                             case.getCurrencyList()
                         }
                     }
@@ -81,7 +90,7 @@ class CurrencySelectionViewModel @Inject constructor(
 
     fun updateItemSelection(letterCode: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(defaultDispatcher) {
                 currencies.currentValue
                     .flatMap(Resource<List<CurrencyListItem>>::extractValue)
                     .getOrElse { error("List is empty") }
@@ -119,6 +128,8 @@ class CurrencySelectionViewModel @Inject constructor(
     }
 
     companion object {
-        private const val ITEMS = "currencyCodes"
+
+        @VisibleForTesting(otherwise = PRIVATE)
+        const val ITEMS = "currencyCodes"
     }
 }

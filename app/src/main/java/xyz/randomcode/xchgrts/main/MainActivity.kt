@@ -28,23 +28,14 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import xyz.randomcode.xchgrts.R
-import xyz.randomcode.xchgrts.domain.RateDataUseCase
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
-import xyz.randomcode.xchgrts.util.Prefs
 import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: ExchangeRatesViewModel by viewModels()
-
-    @Inject
-    lateinit var prefs: Prefs
-
-    @Inject
-    lateinit var rateDataUseCase: RateDataUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()

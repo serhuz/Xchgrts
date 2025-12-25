@@ -46,6 +46,7 @@ class CurrencySelectionActivity : AppCompatActivity() {
         setResult(RESULT_CANCELED)
 
         viewModel.confirmSelection.observe(this) { updateWidget() }
+        viewModel.loadCurrencyList()
 
         setContent {
             CurrencySelectionScreen(viewModel) { finish() }
