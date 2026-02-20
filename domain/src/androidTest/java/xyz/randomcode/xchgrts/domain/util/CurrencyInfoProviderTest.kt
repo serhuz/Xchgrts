@@ -21,7 +21,6 @@ import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.equalToIgnoringCase
 import org.junit.Assume.assumeThat
 import org.junit.Test
-import xyz.randomcode.xchgrts.domain.R
 import xyz.randomcode.xchgrts.entities.CurrencyCode
 import xyz.randomcode.xchgrts.entities.CurrencyListItem
 import java.util.*
@@ -29,32 +28,37 @@ import java.util.*
 class CurrencyInfoProviderTest {
 
     private val flagProvider: FlagResourceProvider = mock {
-        on { fallbackIcon() } doReturn R.drawable.globe
-        on { getFlag(any()) } doReturn R.drawable.globe
+        on { fallbackIcon() } doReturn com.blongho.country_data.R.drawable.globe
+        on { getFlag(any()) } doReturn com.blongho.country_data.R.drawable.globe
     }
 
     private val provider = CurrencyInfoProvider(Locale.ENGLISH, flagProvider)
 
     @Test
     fun getFlagIcon() {
-        val actual = provider.flagRes.get("EUR")
+        val actual = provider.getFlagRes("EUR")
 
         verify(flagProvider).getFlag(eq("EU"))
-        assumeThat(actual, equalTo(R.drawable.globe))
+        assumeThat(actual, equalTo(com.blongho.country_data.R.drawable.globe))
     }
 
     @Test
     fun getCurrencyName() {
-        val actual = provider.currencyName.get("USD")
+        val actual = provider.getCurrencyName("USD")
 
         assumeThat(actual, equalToIgnoringCase("US Dollar"))
     }
 
     @Test
     fun getListItem() {
-        val expected = CurrencyListItem("826", "GBP", "British Pound", R.drawable.globe)
+        val expected = CurrencyListItem(
+            "826",
+            "GBP",
+            "British Pound",
+            com.blongho.country_data.R.drawable.globe
+        )
 
-        val actual = provider.listItem.get(CurrencyCode("826", "GBP"))
+        val actual = provider.getCurrencyListItem(CurrencyCode("826", "GBP"))
 
         verify(flagProvider).getFlagResourceForCurrency(eq("GB"))
         assumeThat(actual, equalTo(expected))

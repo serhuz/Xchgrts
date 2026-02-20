@@ -36,4 +36,12 @@ dependencies {
     api libs.kotlinx.datetime
     implementation libs.worldCountryData
     implementation libs.bundles.retrofit
+
+    testApi libs.mockito.core
+    testApi libs.mockito.kotlin
+    testApi libs.coroutines.test
+    testApi libs.strikt.core
+    testApi libs.core.testing
+    testApi libs.mockk.android
+    testApi libs.mockk.agent
 }

@@ -19,33 +19,37 @@ package xyz.randomcode.xchgrts.domain.util
 import android.icu.util.Currency
 import arrow.core.Option
 import arrow.core.getOrElse
-import arrow.optics.Getter
 import xyz.randomcode.xchgrts.entities.CurrencyCode
 import xyz.randomcode.xchgrts.entities.CurrencyListItem
-import java.util.*
+import java.util.Locale
 
 class CurrencyInfoProvider(private val locale: Locale, private val provider: FlagResourceProvider) {
 
     private val available = Currency.getAvailableCurrencies()
 
-    val flagRes = Getter(provider::getFlagResourceForCurrency)
+    fun getFlagRes(letterCode: String): Int = provider.getFlagResourceForCurrency(letterCode)
 
-    val currencyName = Getter<String, String> { letterCode ->
+    fun getCurrencyName(letterCode: String): String =
         Option.fromNullable(available.singleOrNull { it.currencyCode == letterCode })
             .map { it.displayName }
             .getOrElse { "" }
-    }
 
-    val listItem = Getter<CurrencyCode, CurrencyListItem> { code ->
+    fun getCurrencyListItem(code: CurrencyCode): CurrencyListItem =
         Option.fromNullable(available.singleOrNull { it.currencyCode == code.letterCode })
             .map {
                 CurrencyListItem(
                     it.numericCode.toString(),
                     code.letterCode,
                     it.getDisplayName(locale),
-                    flagRes.get(code.letterCode)
+                    getFlagRes(code.letterCode)
                 )
             }
-            .getOrElse { CurrencyListItem(code.numberCode, code.letterCode, "", provider.fallbackIcon()) }
-    }
+            .getOrElse {
+                CurrencyListItem(
+                    code.numberCode,
+                    code.letterCode,
+                    "",
+                    provider.fallbackIcon()
+                )
+            }
 }

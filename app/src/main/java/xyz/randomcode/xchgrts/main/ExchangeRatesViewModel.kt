@@ -24,7 +24,6 @@ import arrow.core.Either
 import arrow.core.identity
 import arrow.core.none
 import arrow.core.some
-import arrow.optics.Getter
 import arrow.optics.Lens
 import arrow.optics.Prism
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -79,14 +78,6 @@ class ExchangeRatesViewModel(
         }
         .catch { emit("") }
 
-
-    private val favItem = Getter<ExchangeListItem, RateListItem> {
-        FavItem(
-            prefs.favCurrencies.contains(it.letterCode),
-            it
-        )
-    }
-
     private var job: Job? = null
 
     fun loadRates() {
@@ -107,7 +98,13 @@ class ExchangeRatesViewModel(
         }
     }
 
-    private fun mapFavorites(list: List<ExchangeListItem>) = list.map(favItem::get)
+    private fun mapFavorites(list: List<ExchangeListItem>) = list.map { it.toRateListItem() }
+
+    private fun ExchangeListItem.toRateListItem() =
+        FavItem(
+            prefs.favCurrencies.contains(letterCode),
+            this
+        )
 
     private fun sortFavorites(list: List<RateListItem>) =
         list.sortedWith { o1, o2 ->

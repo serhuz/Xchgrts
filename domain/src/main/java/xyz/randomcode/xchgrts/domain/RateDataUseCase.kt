@@ -19,9 +19,7 @@ package xyz.randomcode.xchgrts.domain
 import androidx.annotation.WorkerThread
 import arrow.core.getOrElse
 import arrow.core.toOption
-import arrow.optics.Getter
 import arrow.optics.Iso
-import arrow.optics.PTraversal
 import xyz.randomcode.xchgrts.domain.util.CurrencyInfoProvider
 import xyz.randomcode.xchgrts.domain.util.DateProvider
 import xyz.randomcode.xchgrts.entities.CurrencyCode
@@ -38,25 +36,40 @@ class RateDataUseCase(
 ) {
 
     private val currencyIso: Iso<CurrencyData, CurrencyEntity> = Iso(
-        get = { CurrencyEntity(it.date, it.time, it.numberCode, it.letterCode, it.units, it.amount.toString()) },
-        reverseGet = { CurrencyData(it.date, it.time, it.numberCode, it.letterCode, it.units, it.amount.toFloat()) }
+        get = {
+            CurrencyEntity(
+                it.date,
+                it.time,
+                it.numberCode,
+                it.letterCode,
+                it.units,
+                it.amount.toString()
+            )
+        },
+        reverseGet = {
+            CurrencyData(
+                it.date,
+                it.time,
+                it.numberCode,
+                it.letterCode,
+                it.units,
+                it.amount.toFloat()
+            )
+        }
     )
 
-    private val listItem = Getter<CurrencyEntity, ExchangeListItem> {
+    private fun CurrencyEntity.toExchangeListItem(): ExchangeListItem =
         ExchangeListItem(
-            it.letterCode,
-            it.units,
-            it.amount,
-            currencyInfoProvider.flagRes.get(it.letterCode),
-            it.date,
-            currencyInfoProvider.currencyName.get(it.letterCode)
+            letterCode,
+            units,
+            amount,
+            currencyInfoProvider.getFlagRes(letterCode),
+            date,
+            currencyInfoProvider.getCurrencyName(letterCode)
         )
-    }
 
-    private val currencyCode = Getter<CurrencyEntity, CurrencyCode> { CurrencyCode(it.numberCode, it.letterCode) }
-
-    private val currencyCodes: PTraversal<List<CurrencyCode>, List<CurrencyListItem>, CurrencyCode, CurrencyListItem> =
-        PTraversal(List<CurrencyCode>::map)
+    private fun CurrencyEntity.toCurrencyCode(): CurrencyCode =
+        CurrencyCode(numberCode, letterCode)
 
     @WorkerThread
     suspend fun getCurrencyList(): List<CurrencyListItem> =
@@ -66,11 +79,11 @@ class RateDataUseCase(
                     .map(currencyIso.reverse()::set)
                     .takeIf { it.isNotEmpty() }
                     ?.also { dao.insertAll(it) }
-                    ?.map(currencyCode::get)
+                    ?.map { it.toCurrencyCode() }
                     ?: emptyList()
 
             }
-            .let { currencyCodes.modify(it, currencyInfoProvider.listItem::get) }
+            .map(currencyInfoProvider::getCurrencyListItem)
 
     @WorkerThread
     suspend fun getRatesForDate(date: CurrentDate): List<ExchangeListItem> =
@@ -82,7 +95,7 @@ class RateDataUseCase(
                     ?.also { entities -> dao.insertAll(entities) }
                     ?: emptyList()
             }
-            .map(listItem::get)
+            .map { it.toExchangeListItem() }
             .sortedBy(ExchangeListItem::letterCode)
 
     @WorkerThread
@@ -95,7 +108,7 @@ class RateDataUseCase(
                     .also { entities -> dao.insertAll(entities) }
                     .single { it.letterCode == letterCode }
             }
-            .let(listItem::get)
+            .toExchangeListItem()
 
     @WorkerThread
     suspend fun updateRates(date: CurrentDate) {

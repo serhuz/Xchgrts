@@ -1,6 +1,5 @@
 package xyz.randomcode.xchgrts.domain
 
-import arrow.optics.Getter
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argThat
 import com.nhaarman.mockitokotlin2.doReturn
@@ -46,8 +45,8 @@ class RateDataUseCaseTest {
     @Before
     fun setUp() {
         provider = mock {
-            on { this.flagRes } doReturn Getter { com.blongho.country_data.R.drawable.globe }
-            on { this.currencyName } doReturn Getter { "" }
+            on { getFlagRes(any()) } doReturn com.blongho.country_data.R.drawable.globe
+            on { getCurrencyName(any()) } doReturn ""
         }
 
         case = RateDataUseCase(api, dao, provider)
