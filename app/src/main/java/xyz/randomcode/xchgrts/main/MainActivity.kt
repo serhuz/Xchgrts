@@ -24,10 +24,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             MainScreen(
                 viewModel = viewModel,
                 licenseAction = {
-                    OssLicensesMenuActivity.setActivityTitle(getString(R.string.menu_oss_licenses));
+//                    OssLicensesMenuActivity.setActivityTitle(getString(R.string.menu_oss_licenses))
                     startActivity(Intent(applicationContext, OssLicensesMenuActivity::class.java))
                 },
                 closeAction = { finish() }
