@@ -67,6 +67,7 @@ class ExchangeRatesViewModel(
     ) : this(prefs, case, logger, Dispatchers.IO)
 
     val items: MutableLiveData<Resource<List<RateListItem>>> = MutableLiveData()
+    val isRefreshing: MutableLiveData<Boolean> = MutableLiveData(false)
 
     val date: Flow<String> = items.asFlow()
         .filterIsInstance<Success<List<RateListItem>>>()
@@ -80,9 +81,10 @@ class ExchangeRatesViewModel(
 
     private var job: Job? = null
 
-    fun loadRates() {
+    fun loadRates(userInitiated: Boolean = false) {
         job?.cancel()
         job = viewModelScope.launch {
+            isRefreshing.value = userInitiated
             items.value = Loading
             Either.catch {
                 withContext(ioDispatcher) {
@@ -95,6 +97,8 @@ class ExchangeRatesViewModel(
                 .map(::Success)
                 .mapLeft(::Failure)
                 .fold(items::setValue, items::setValue)
+
+            isRefreshing.value = false
         }
     }
 

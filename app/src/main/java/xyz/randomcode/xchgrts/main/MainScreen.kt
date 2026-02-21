@@ -68,7 +68,6 @@ import retrofit2.HttpException
 import xyz.randomcode.xchgrts.R
 import xyz.randomcode.xchgrts.entities.ExchangeListItem
 import xyz.randomcode.xchgrts.entities.Failure
-import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.theme.AppTheme
 import java.net.UnknownHostException
@@ -101,13 +100,14 @@ fun MainScreen(
             },
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { contentPadding ->
+            val isRefreshing = viewModel.isRefreshing.observeAsState(false)
             val state = viewModel.items.observeAsState()
             PullToRefreshBox(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(contentPadding),
-                isRefreshing = (state.value != null && state.value is Loading),
-                onRefresh = viewModel::loadRates
+                isRefreshing = isRefreshing.value,
+                onRefresh = { viewModel.loadRates(true) }
             ) {
                 when (val resource = state.value) {
                     is Success<List<RateListItem>> -> {
