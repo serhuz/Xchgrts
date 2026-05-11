@@ -35,6 +35,7 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProviders
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxWidth
@@ -59,12 +60,35 @@ import xyz.randomcode.xchgrts.main.MainActivity
 
 class ExchangeRateWidget : GlanceAppWidget() {
 
+    @get:Composable
+    private val themeColors: ColorProviders
+        get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            GlanceTheme.colors
+        else
+            WidgetTheme.colors
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        provideContent {
+            GlanceTheme(themeColors) {
+                WidgetUi(
+                    ExchangeListItem(
+                        letterCode = "XXX",
+                        units = 1,
+                        amount = "1.00",
+                        flagRes = com.blongho.country_data.R.drawable.globe,
+                        date = "01.01"
+                    )
+                )
+            }
+        }
+    }
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val entryPoint = EntryPoints.get<WidgetEntryPoint>(context, WidgetEntryPoint::class.java)
+        val entryPoint = EntryPoints.get(context, WidgetEntryPoint::class.java)
         val useCase = entryPoint.useCase()
         val prefs = entryPoint.prefs()
 
-        val appWidgetManager = GlanceAppWidgetManager(context)
+        val appWidgetManager = GlanceAppWidgetManager(context.applicationContext)
         val widgetId = appWidgetManager.getAppWidgetId(id)
 
         val data = withContext(Dispatchers.IO) {
@@ -78,12 +102,7 @@ class ExchangeRateWidget : GlanceAppWidget() {
         }
 
         provideContent {
-            GlanceTheme(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    GlanceTheme.colors
-                else
-                    WidgetTheme.colors
-            ) {
+            GlanceTheme(themeColors) {
                 data?.let { WidgetUi(it) } ?: ErrorUi()
             }
         }

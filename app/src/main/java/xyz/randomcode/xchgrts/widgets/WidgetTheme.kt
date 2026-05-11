@@ -16,7 +16,9 @@
 
 package xyz.randomcode.xchgrts.widgets
 
+import androidx.compose.runtime.Composable
 import androidx.glance.color.ColorProvider
+import androidx.glance.color.ColorProviders
 import androidx.glance.color.colorProviders
 import xyz.randomcode.xchgrts.theme.backgroundDark
 import xyz.randomcode.xchgrts.theme.backgroundLight
@@ -72,33 +74,38 @@ import xyz.randomcode.xchgrts.theme.tertiaryLight
 
 object WidgetTheme {
 
-    val colors = colorProviders(
-        primary = ColorProvider(primaryLight, primaryDark),
-        onPrimary = ColorProvider(onPrimaryLight, onPrimaryDark),
-        primaryContainer = ColorProvider(primaryContainerLight, primaryContainerDark),
-        onPrimaryContainer = ColorProvider(onPrimaryLight, onPrimaryContainerDark),
-        secondary = ColorProvider(secondaryLight, secondaryDark),
-        onSecondary = ColorProvider(onSecondaryLight, onSecondaryDark),
-        secondaryContainer = ColorProvider(secondaryContainerLight, secondaryContainerDark),
-        onSecondaryContainer = ColorProvider(onSecondaryContainerLight, onSecondaryContainerDark),
-        tertiary = ColorProvider(tertiaryLight, tertiaryDark),
-        onTertiary = ColorProvider(onTertiaryLight, onTertiaryDark),
-        tertiaryContainer = ColorProvider(tertiaryContainerLight, tertiaryContainerDark),
-        onTertiaryContainer = ColorProvider(onTertiaryContainerLight, onTertiaryContainerDark),
-        error = ColorProvider(errorLight, errorDark),
-        errorContainer = ColorProvider(errorContainerLight, errorContainerDark),
-        onError = ColorProvider(onErrorLight, onErrorDark),
-        onErrorContainer = ColorProvider(onErrorContainerLight, onErrorContainerDark),
-        background = ColorProvider(backgroundLight, backgroundDark),
-        onBackground = ColorProvider(onBackgroundLight, onBackgroundDark),
-        surface = ColorProvider(surfaceLight, surfaceDark),
-        onSurface = ColorProvider(onSurfaceLight, onSurfaceDark),
-        surfaceVariant = ColorProvider(surfaceVariantLight, surfaceVariantDark),
-        onSurfaceVariant = ColorProvider(onSurfaceVariantLight, onSurfaceVariantDark),
-        outline = ColorProvider(outlineLight, outlineDark),
-        inverseOnSurface = ColorProvider(inverseOnSurfaceLight, inverseOnSurfaceDark),
-        inverseSurface = ColorProvider(inverseSurfaceLight, inverseSurfaceDark),
-        inversePrimary = ColorProvider(inversePrimaryLight, inversePrimaryDark),
-        widgetBackground = ColorProvider(surfaceVariantLight, surfaceVariantDark)
-    )
+    @get:Composable
+    val colors: ColorProviders
+        get() = colorProviders(
+            primary = ColorProvider(primaryLight, primaryDark),
+            onPrimary = ColorProvider(onPrimaryLight, onPrimaryDark),
+            primaryContainer = ColorProvider(primaryContainerLight, primaryContainerDark),
+            onPrimaryContainer = ColorProvider(onPrimaryLight, onPrimaryContainerDark),
+            secondary = ColorProvider(secondaryLight, secondaryDark),
+            onSecondary = ColorProvider(onSecondaryLight, onSecondaryDark),
+            secondaryContainer = ColorProvider(secondaryContainerLight, secondaryContainerDark),
+            onSecondaryContainer = ColorProvider(
+                onSecondaryContainerLight,
+                onSecondaryContainerDark
+            ),
+            tertiary = ColorProvider(tertiaryLight, tertiaryDark),
+            onTertiary = ColorProvider(onTertiaryLight, onTertiaryDark),
+            tertiaryContainer = ColorProvider(tertiaryContainerLight, tertiaryContainerDark),
+            onTertiaryContainer = ColorProvider(onTertiaryContainerLight, onTertiaryContainerDark),
+            error = ColorProvider(errorLight, errorDark),
+            errorContainer = ColorProvider(errorContainerLight, errorContainerDark),
+            onError = ColorProvider(onErrorLight, onErrorDark),
+            onErrorContainer = ColorProvider(onErrorContainerLight, onErrorContainerDark),
+            background = ColorProvider(backgroundLight, backgroundDark),
+            onBackground = ColorProvider(onBackgroundLight, onBackgroundDark),
+            surface = ColorProvider(surfaceLight, surfaceDark),
+            onSurface = ColorProvider(onSurfaceLight, onSurfaceDark),
+            surfaceVariant = ColorProvider(surfaceVariantLight, surfaceVariantDark),
+            onSurfaceVariant = ColorProvider(onSurfaceVariantLight, onSurfaceVariantDark),
+            outline = ColorProvider(outlineLight, outlineDark),
+            inverseOnSurface = ColorProvider(inverseOnSurfaceLight, inverseOnSurfaceDark),
+            inverseSurface = ColorProvider(inverseSurfaceLight, inverseSurfaceDark),
+            inversePrimary = ColorProvider(inversePrimaryLight, inversePrimaryDark),
+            widgetBackground = ColorProvider(surfaceVariantLight, surfaceVariantDark)
+        )
 }

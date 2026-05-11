@@ -26,15 +26,21 @@ import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.oss.licenses.v2.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import xyz.randomcode.xchgrts.entities.Success
 import xyz.randomcode.xchgrts.updater.UpdateWorker
 import xyz.randomcode.xchgrts.widgets.ExchangeRateWidget
+import xyz.randomcode.xchgrts.widgets.WidgetPreviewPublisher
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: ExchangeRatesViewModel by viewModels()
+
+    @Inject
+    lateinit var widgetPreviewPublisher: WidgetPreviewPublisher
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -61,7 +67,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateWidgets() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Default) {
+            widgetPreviewPublisher.publishPreviewsIfMissing()
             ExchangeRateWidget().updateAll(applicationContext)
         }
     }
