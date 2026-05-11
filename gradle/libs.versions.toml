@@ -1,40 +1,40 @@
 [versions]
-activityComposeVersion = "1.12.4"
+activityComposeVersion = "1.13.0"
 agpVersion = "8.13.2"
-annotationVersion = "1.9.1"
+annotationVersion = "1.10.0"
 appcompatVersion = "1.7.1"
-arrowVersion = "2.2.1.1"
+arrowVersion = "2.2.2.1"
 composeBomVersion = "2026.02.00"
-coreKtxVersion = "1.17.0"
+coreKtxVersion = "1.18.0"
 coreTestingVersion = "2.2.0"
-coroutinesVersion = "1.10.2"
-datastorePreferencesVersion = "1.2.0"
+coroutinesVersion = "1.11.0"
+datastorePreferencesVersion = "1.2.1"
 desugar_jdk_libsVersion = "2.1.5"
 detekt = "1.23.8"
 espressoCoreVersion = "3.7.0"
-firebaseBomVersion = "34.9.0"
+firebaseBomVersion = "34.13.0"
 glanceVersion = "1.2.0-rc01"
 hiltVersion = "2.57.2"
 hilCompilerVersion = "1.3.0"
 hiltWorkVersion = "1.3.0"
 junit = "1.3.0"
-kotlinVersion = "2.3.10"
+kotlinVersion = "2.3.21"
 lifecycleVersion = "2.10.0"
 materialVersion = "1.13.0"
-mockitoCoreVersion = "5.21.0"
+mockitoCoreVersion = "5.23.0"
 mockitoKotlinVersion = "2.2.0"
 mockkAndroidVersion = "1.14.9"
 moshiVersion = "1.15.2"
 okhttpVersion = "5.3.2"
-playServicesOssLicensesVersion = "17.4.0"
+playServicesOssLicensesVersion = "17.5.1"
 preferenceVersion = "1.2.1"
 recyclerviewVersion = "1.4.0"
 retrofitVersion = "3.0.0"
 roomVersion = "2.8.4"
 striktCoreVersion = "0.35.1"
-workVersion = "2.11.1"
+workVersion = "2.11.2"
 worldCountryDataVersion = "1.5.3"
-uiTextGoogleFontsVersion = "1.10.3"
+uiTextGoogleFontsVersion = "1.11.1"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -63,7 +63,7 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltV
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltVersion" }
 hilt-compiler-androidx = { module = "androidx.hilt:hilt-compiler", version.ref = "hilCompilerVersion" }
 hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWorkVersion" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.7.1" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.8.0" }
 lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
 lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
@@ -103,13 +103,13 @@ android-library = { id = "com.android.library", version.ref = "agpVersion" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
 detekt-plugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
-google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
-google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.10.10" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
+google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.12.0" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
 room = { id = "androidx.room", version.ref = "roomVersion" }
-versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }
+versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
 
 
 [bundles]
