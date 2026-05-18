@@ -33,7 +33,7 @@ android {
 
     defaultConfig {
         applicationId "xyz.randomcode.xchgrts"
-        versionCode 7
+        versionCode 8
         versionName "1.0"
         targetSdk = libs.versions.targetSdk.get().toInteger()
 
