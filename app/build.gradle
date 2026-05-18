@@ -39,8 +39,6 @@ android {
 
         buildConfigField "String", "UPDATE_WORK_NAME", '"updater"'
         buildConfigField "String", "UPDATE_WORK_TAG", '"update_rates"'
-
-//        setProperty("archivesBaseName", "app-${versionName}_${versionCode}-${getDate()}")
     }
 
     buildFeatures {
@@ -70,6 +68,16 @@ android {
     }
 }
 
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.each { output ->
+            output.outputFileName.set(
+                    "app-${output.versionName.get()}_${output.versionCode.get()}-${getDate()}.apk"
+            )
+        }
+    }
+}
+
 detekt {
     config.setFrom(file(rootProject.file("common/detekt.yml")))
     buildUponDefaultConfig = false
@@ -80,7 +88,6 @@ dependencies {
     implementation project(':domain')
 
     implementation libs.moshi
-    ksp libs.moshi.codegen
 
     implementation libs.bundles.retrofit
     implementation libs.bundles.okhttp
