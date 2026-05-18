@@ -41,6 +41,7 @@ import xyz.randomcode.xchgrts.entities.ExchangeListItem
 import xyz.randomcode.xchgrts.entities.Failure
 import xyz.randomcode.xchgrts.entities.Loading
 import xyz.randomcode.xchgrts.entities.Success
+import xyz.randomcode.xchgrts.theme.AppTheme
 import java.net.UnknownHostException
 
 class MainScreenTest {
@@ -131,6 +132,50 @@ class MainScreenTest {
                         )
             )
             .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag(TAG_LOADING_INDICATOR).assertIsNotDisplayed()
+    }
+
+    @Test
+    fun listItemShouldDisplayContentAndTriggerFavoriteAction() {
+        val updateFavAction: (String) -> Unit = mockk(relaxed = true)
+        val item = RateListItem(
+            true,
+            ExchangeListItem(
+                "AAA",
+                10,
+                "42.00",
+                com.blongho.country_data.R.drawable.eu,
+                "01.01.2025",
+                "Currency"
+            )
+        )
+
+        composeTestRule.setContent {
+            AppTheme {
+                ListItem(
+                    item = item,
+                    updateFavAction = updateFavAction
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("10 AAA").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Currency").assertIsDisplayed()
+        composeTestRule.onNodeWithText("42.00").assertIsDisplayed()
+        composeTestRule
+            .onNode(
+                hasTestTag("${TAG_FAVORITE}_AAA") and
+                        SemanticsMatcher.expectValue(
+                            SemanticsProperties.StateDescription,
+                            SEMANTICS_TAG_FAVORITE
+                        )
+            )
+            .assertIsDisplayed()
+
+        composeTestRule.onNodeWithTag("${TAG_FAVORITE}_AAA").performClick()
+
+        verify { updateFavAction.invoke("AAA") }
     }
 
     @Test
@@ -158,6 +203,42 @@ class MainScreenTest {
         composeTestRule.setContent { MainScreen(viewModel, {}, {}) }
 
         composeTestRule.onNode(hasTestTag(TAG_APP_TITLE)).assert(hasText(date))
+    }
+
+    @Test
+    fun favoriteActionShouldBeTriggeredWhenFavoriteButtonPressed() {
+        val viewModel: ExchangeRatesViewModel = mockk(relaxed = true)
+        val items = listOf(
+            RateListItem(
+                false,
+                ExchangeListItem(
+                    "AAA",
+                    1,
+                    "1.00",
+                    com.blongho.country_data.R.drawable.eu,
+                    "01.01.2025"
+                )
+            ),
+            RateListItem(
+                false,
+                ExchangeListItem(
+                    "BBB",
+                    1,
+                    "2.00",
+                    com.blongho.country_data.R.drawable.globe,
+                    "01.01.2025"
+                )
+            )
+        )
+        every { viewModel.items } returns MutableLiveData(Success(items))
+        every { viewModel.isRefreshing } returns MutableLiveData(false)
+        every { viewModel.date } returns flowOf("")
+
+        composeTestRule.setContent { MainScreen(viewModel, {}, {}) }
+
+        composeTestRule.onNodeWithTag("${TAG_FAVORITE}_AAA").performClick()
+
+        verify { viewModel.updateFavorites("AAA") }
     }
 
     @Test
