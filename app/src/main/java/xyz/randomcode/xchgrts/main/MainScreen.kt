@@ -55,9 +55,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_8
 import androidx.compose.ui.tooling.preview.Preview
@@ -98,7 +101,12 @@ fun MainScreen(
                     licenseAction = licenseAction
                 )
             },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier.testTag(TAG_SNACKBAR)
+                )
+            }
         ) { contentPadding ->
             val isRefreshing = viewModel.isRefreshing.observeAsState(false)
             val state = viewModel.items.observeAsState()
@@ -148,6 +156,7 @@ fun MainScreen(
                                 if (result == SnackbarResult.ActionPerformed) {
                                     when (reason) {
                                         is HttpException, is UnknownHostException -> {
+                                            snackbarHostState.currentSnackbarData?.dismiss()
                                             viewModel.loadRates()
                                         }
 
@@ -164,7 +173,8 @@ fun MainScreen(
                                 modifier = Modifier
                                     .width(48.dp)
                                     .height(48.dp)
-                                    .align(Alignment.Center),
+                                    .align(Alignment.Center)
+                                    .testTag(TAG_LOADING_INDICATOR),
                                 color = MaterialTheme.colorScheme.secondary,
                                 trackColor = MaterialTheme.colorScheme.surfaceVariant,
                             )
@@ -185,12 +195,13 @@ fun MainScreenToolbar(
     CenterAlignedTopAppBar(
         title = {
             Text(
+                modifier = Modifier.testTag(TAG_APP_TITLE),
                 text = title.ifEmpty { stringResource(R.string.app_name) },
                 color = MaterialTheme.colorScheme.onPrimary
             )
         },
         actions = {
-            IconButton(onClick = licenseAction::invoke) {
+            IconButton(onClick = licenseAction::invoke, modifier = Modifier.testTag(TAG_LICENSE)) {
                 Icon(
                     painter = painterResource(R.drawable.ic_description_32),
                     contentDescription = stringResource(R.string.desc_license)
@@ -225,7 +236,8 @@ fun ListItem(
         Icon(
             modifier = Modifier
                 .width(32.dp)
-                .height(32.dp),
+                .height(32.dp)
+                .testTag("${TAG_FLAG}_${item.data.letterCode}"),
             painter = (painterResource(item.data.flagRes)),
             contentDescription = stringResource(R.string.desc_flag),
             tint = Color.Unspecified
@@ -271,7 +283,12 @@ fun ListItem(
             modifier = Modifier
                 .padding(start = 16.dp)
                 .width(32.dp)
-                .height(32.dp),
+                .height(32.dp)
+                .testTag("${TAG_FAVORITE}_${item.data.letterCode}")
+                .semantics {
+                    stateDescription =
+                        if (item.isFavorite) SEMANTICS_TAG_FAVORITE else SEMANTICS_TAG_NOT_FAVORITE
+                },
             onClick = { updateFavAction.invoke(item.data.letterCode) }
         ) {
             Icon(
@@ -310,3 +327,12 @@ fun ListItemPreview() {
         )
     }
 }
+
+const val TAG_APP_TITLE = "app_title"
+const val TAG_SNACKBAR = "err_snackbar"
+const val TAG_LICENSE = "license"
+const val TAG_LOADING_INDICATOR = "loading_indicator"
+const val TAG_FLAG = "flag"
+const val TAG_FAVORITE = "favorite"
+const val SEMANTICS_TAG_FAVORITE = "favorite"
+const val SEMANTICS_TAG_NOT_FAVORITE = "not favorite"

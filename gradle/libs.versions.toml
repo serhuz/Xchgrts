@@ -5,6 +5,7 @@ annotationVersion = "1.10.0"
 appcompatVersion = "1.7.1"
 arrowVersion = "2.2.2.1"
 composeBomVersion = "2026.02.00"
+composeUiTestVersion = "1.11.1"
 coreKtxVersion = "1.18.0"
 coreTestingVersion = "2.2.0"
 coroutinesVersion = "1.11.0"
@@ -46,6 +47,8 @@ arrow-optics = { module = "io.arrow-kt:arrow-optics" }
 arrow-optics-plugin = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrowVersion" }
 arrow-stack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrowVersion" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+compose-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeUiTestVersion" }
+compose-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeUiTestVersion" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTestingVersion" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesVersion" }

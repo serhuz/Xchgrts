@@ -48,7 +48,4 @@ dependencies {
     testApi libs.core.testing
     testApi libs.mockk.android
     testApi libs.mockk.agent
-
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
 }

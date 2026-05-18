@@ -28,6 +28,10 @@ android {
     namespace = 'xyz.randomcode.xchgrts'
     compileSdkVersion 36
 
+    sourceSets {
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
     defaultConfig {
         applicationId "xyz.randomcode.xchgrts"
         versionCode 7
@@ -132,4 +136,11 @@ dependencies {
     implementation libs.lifecycle.viewmodel.compose
     // Integration with LiveData
     implementation libs.runtime.livedata
+
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.compose.test.junit4
+    androidTestImplementation libs.mockk.android
+    androidTestImplementation libs.mockk.agent
+    debugImplementation libs.compose.test.manifest
 }
