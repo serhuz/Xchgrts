@@ -1,10 +1,10 @@
 [versions]
 activityComposeVersion = "1.13.0"
-agpVersion = "8.13.2"
+agpVersion = "9.2.1"
 annotationVersion = "1.10.0"
 appcompatVersion = "1.7.1"
 arrowVersion = "2.2.2.1"
-composeBomVersion = "2026.02.00"
+composeBomVersion = "2026.05.00"
 composeUiTestVersion = "1.11.1"
 coreKtxVersion = "1.18.0"
 coreTestingVersion = "2.2.0"
@@ -15,13 +15,13 @@ detekt = "1.23.8"
 espressoCoreVersion = "3.7.0"
 firebaseBomVersion = "34.13.0"
 glanceVersion = "1.2.0-rc01"
-hiltVersion = "2.57.2"
+hiltVersion = "2.59.2"
 hilCompilerVersion = "1.3.0"
 hiltWorkVersion = "1.3.0"
 junit = "1.3.0"
 kotlinVersion = "2.3.21"
 lifecycleVersion = "2.10.0"
-materialVersion = "1.13.0"
+materialVersion = "1.14.0"
 mockitoCoreVersion = "5.23.0"
 mockitoKotlinVersion = "2.2.0"
 mockkAndroidVersion = "1.14.9"
@@ -36,6 +36,10 @@ striktCoreVersion = "0.35.1"
 workVersion = "2.11.2"
 worldCountryDataVersion = "1.5.3"
 uiTextGoogleFontsVersion = "1.11.1"
+
+minSdk = "26"
+targetSdk = "37"
+compileSdk = "37"
 
 [libraries]
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
@@ -105,12 +109,11 @@ android-application = { id = "com.android.application", version.ref = "agpVersio
 android-library = { id = "com.android.library", version.ref = "agpVersion" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinVersion" }
 detekt-plugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-google-ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
+google-ksp = { id = "com.google.devtools.ksp", version = "2.3.8" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
 google-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.12.0" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinVersion" }
 room = { id = "androidx.room", version.ref = "roomVersion" }
 versions = { id = "com.github.ben-manes.versions", version = "0.54.0" }
 

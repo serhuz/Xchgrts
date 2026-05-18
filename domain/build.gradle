@@ -1,6 +1,5 @@
 plugins {
     alias libs.plugins.android.library
-    id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'androidx.room'
     alias libs.plugins.detekt.plugin
@@ -24,6 +23,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        targetSdk libs.versions.targetSdk.get().toInteger()
+    }
+
+    lint {
+        targetSdk libs.versions.targetSdk.get().toInteger()
+    }
 }
 
 dependencies {
@@ -37,11 +44,11 @@ dependencies {
     implementation libs.worldCountryData
     implementation libs.bundles.retrofit
 
-    testApi libs.mockito.core
-    testApi libs.mockito.kotlin
-    testApi libs.coroutines.test
-    testApi libs.strikt.core
-    testApi libs.core.testing
-    testApi libs.mockk.android
-    testApi libs.mockk.agent
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.coroutines.test
+    testImplementation libs.strikt.core
+    testImplementation libs.core.testing
+    testImplementation libs.mockk.android
+    testImplementation libs.mockk.agent
 }

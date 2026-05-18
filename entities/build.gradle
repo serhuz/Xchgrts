@@ -1,6 +1,5 @@
 plugins {
     alias libs.plugins.android.library
-    id 'kotlin-android'
     id 'com.google.devtools.ksp'
     alias libs.plugins.detekt.plugin
 }
@@ -21,6 +20,13 @@ android {
         }
     }
 
+    testOptions {
+        targetSdk libs.versions.targetSdk.get().toInteger()
+    }
+
+    lint {
+        targetSdk libs.versions.targetSdk.get().toInteger()
+    }
 }
 
 dependencies {

@@ -2,7 +2,6 @@ import java.text.SimpleDateFormat
 
 plugins {
     alias libs.plugins.android.application
-    id 'kotlin-android'
     id 'com.google.devtools.ksp'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
@@ -26,21 +25,22 @@ static def getDate() {
 
 android {
     namespace = 'xyz.randomcode.xchgrts'
-    compileSdkVersion 36
+    compileSdkVersion libs.versions.compileSdk.get().toInteger()
 
     sourceSets {
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        androidTest.kotlin.srcDirs += 'src/androidTest/kotlin'
     }
 
     defaultConfig {
         applicationId "xyz.randomcode.xchgrts"
         versionCode 7
         versionName "1.0"
+        targetSdk = libs.versions.targetSdk.get().toInteger()
 
         buildConfigField "String", "UPDATE_WORK_NAME", '"updater"'
         buildConfigField "String", "UPDATE_WORK_TAG", '"update_rates"'
 
-        setProperty("archivesBaseName", "app-${versionName}_${versionCode}-${getDate()}")
+//        setProperty("archivesBaseName", "app-${versionName}_${versionCode}-${getDate()}")
     }
 
     buildFeatures {
